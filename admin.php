@@ -75,9 +75,9 @@ if ($_SESSION["groups"] != "admin"){
                 </thead>
                 <tbody>
                 <tr v-for="(item) in userlog">
-                    <td v-if="item.userid == this.show">{{item.action == "login" ? "登入" : item.action == "logout" ? "登出" : "登入失敗"}}</td>
-                    <td v-if="item.userid == this.show">{{item.message}}</td>
-                    <td v-if="item.userid == this.show">{{item.time}}</td>
+                    <td v-show="item.userid == this.show">{{item.action == "login" ? "登入" : item.action == "logout" ? "登出" : "登入失敗"}}</td>
+                    <td v-show="item.userid == this.show">{{item.message}}</td>
+                    <td v-show="item.userid == this.show">{{item.time}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -117,6 +117,10 @@ if ($_SESSION["groups"] != "admin"){
                 })
             },
             changegroups(userid,set){
+                if (userid == this.userid) {
+                    alert("無法更改自己的使用者權限")
+                    return;
+                }
                 const _this = this
                 $.post("api.php?do=changegroups",{userid,set},function () {
                     alert("已成功更改使用者權限")

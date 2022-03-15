@@ -52,7 +52,7 @@ body{
     margin: 0;
 }
 
-.login > input[type="text"],input[type="password"]{
+.login > div > input[type="text"],input[type="password"]{
     font-size: 18px;
     width: 385px;
     height: 40px;
@@ -63,7 +63,7 @@ body{
     border-bottom: solid 0.5px #ccc;
 }
 
-.login > input:focus{
+.login > div > input:focus{
     border: 0;
     border-bottom: solid 0.5px #ccc;
     box-shadow: unset;
@@ -108,9 +108,49 @@ body{
 }
 
 .block {
-    height: 37px;
-    width: calc(100% - 80px);
-    background: rgb(235,217,244);
+    width: 10%;
+    background: rgba(235,217,244,60%);
+    padding: 5px;
     border-left: solid 3px rgb(178,93,211);
     border-radius: 5px;
+    margin: 5px 0px;
+    color: rgb(138,84,160);
+    position: absolute;
+    left: 100px;
+}
+
+.block > b{
+    margin-left: 5px;
+}
+
+.block > .blockhead{
+    display: flex;
+    justify-content: space-between;
+}
+
+.block > .blockhead > p {
+    margin: 0px;
+    line-height: 17px;
+}
+
+.work > thead > tr > td:last-child{
+    display: flex;
+    justify-content: center;
+}
+
+.work > tbody > tr >td:first-child{
+    display: flex;
+    align-items: center;
+}
+
+.work > tbody > tr >td{
+    height: 50px;
+}
+
+.addwork{
+    width: calc(100%);
+}
+
+.addwork15{
+    width: calc(100% - 15px);
 }

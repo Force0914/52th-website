@@ -8,10 +8,12 @@
 <div id="app" class="center">
     <div class="login">
         <h2 class="text-center">網站會員管理系統</h2>
-        <input type="text" name="account" placeholder="帳號" autocomplete="off" id="account" v-model="account"><br>
-        <input type="password" name="password" placeholder="密碼" id="password" v-model="password"><br>
+        <div>
+            <input type="text" placeholder="帳號" v-model="account"><br>
+            <input type="text" placeholder="密碼" v-model="password"><br>
+        </div>
         <p>驗證碼</p><img :src=`gd.php?${this.v}` alt="captcha" @click="captcha()"><input style="width: 60%" class="btn" type="button" value="驗證碼重置" @click="resetlist"><br>
-        <div class="drogbox" v-if="list1.length > 0">
+        <div class="drogbox" v-show="list1.length > 0">
             <div class="drog" v-for="(item, index) in list1" :key="index" draggable="true" @dragstart="onStartDrag(index)">
                 {{ item }}
             </div>

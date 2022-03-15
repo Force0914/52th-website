@@ -35,6 +35,11 @@ switch ($_GET['do']){
         $row = fetchall($result);
         echo json_encode($row);
         break;
+    case "worklist":
+        $result = query("SELECT * FROM works WHERE userid = {$P["userid"]} ORDER BY startTime");
+        $row = fetchall($result);
+        echo json_encode($row);
+        break;
     case "userlog":
         $result = query("SELECT * FROM userlog");
         $row = fetchall($result);
