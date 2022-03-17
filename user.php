@@ -9,7 +9,7 @@ session_start();
 </head>
 <body>
 <div id="app">
-    <div class="block" v-for="(item, index) in list()" :style="{'height': (item.endTime-item.startTime)*32 + 2 + 'px','z-index': 1 + item.id,top:122 + (item.startTime) *33.5 + 'px','left': this.workcheck(index) ? '260px' : '100px'}">
+    <div class="block" v-for="(item, index) in list()" :style="{'height': (item.endTime-item.startTime)*32 + 'px','z-index': 1 + item.id,top:122 + (item.startTime) *33.5 + 'px','left': 100 + 160 * this.workcheck(index) + 'px'}">
         <div class="blockhead">
             <p>{{bla(item.startTime)}}:00 - {{bla(item.endTime)}}:00</p>
             <span :class="{'badge':true,'badge-success':item.staus=='done','badge-warning':item.staus=='ing','badge-important':item.staus=='pending'}">{{item.staus == "done" ? "已完成" : item.staus == "ing" ? "處理中" : "未處理"}}</span>
@@ -80,7 +80,7 @@ session_start();
                 date: new Date(),
                 data: [[]],
                 datalist:[],
-                time: [[]],
+                time: [],
                 name:"",
                 staus: "present",
                 speed: "present",
@@ -119,19 +119,34 @@ session_start();
             loadworks(){
                 const _this = this
                 $.post("api.php?do=worklist",this.$data,function (a) {
-                    _this.datalist = JSON.parse(a)
+                    a = JSON.parse(a)
+                    a.forEach(e=>{
+                        Object.assign(e,{location:0})
+                    })
+                    _this.datalist = a
                     console.log(_this.datalist)
                 })
             },
             workcheck(a){
-                if (a == 0) return false
-                if (this.datalist[a].startTime < this.datalist[a-1].endTime) return true
+                let location = this.datalist[a].location
+                let newlocation = 0
+                if (a == 0) return location
+                for (i = this.datalist[a].startTime; i <= this.datalist[a].endTime; i++) {
+                    this.time[i].push(true)
+                }
+                for (i = 0; i < a; i++) {
+                    if (this.datalist[a].startTime < this.datalist[i].endTime) newlocation = location + 1
+                }
+                for (i = 0; i < a; i++) {
+                    if (this.datalist[a].startTime >= this.datalist[i].endTime) newlocation = location
+                }
+                return newlocation
             }
         },
         mounted(){
             for (i = 0; i < 24 ; i+=2) {
                 this.tiemlist.push(i)
-                this.time[0].push(false,false)
+                this.time.push([],[])
             }
             this.loadworks()
             $("#myModal").modal("toggle")
