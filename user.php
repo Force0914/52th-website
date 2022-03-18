@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (!isset($_SESSION["userid"])){
+    header("Location:index.php");
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -9,17 +12,19 @@ session_start();
 </head>
 <body>
 <div id="app">
-    <div class="block" v-for="(item, index) in list()" :style="{'height': (item.endTime-item.startTime)*32 + 'px','z-index': 1 + item.id,top:122 + (item.startTime) *33.5 + 'px','left': 100 + 160 * this.workcheck(index) + 'px'}">
+    <input type="button" value="登出" class="logout btn" @click="logout">
+    <div class="block" v-for="(item, index) in list()" :style="{'height': (item.endTime-item.startTime)*33.5 + 'px','z-index': 10,top:122 + (item.startTime) *33 + 'px','left': 100 + 175 * item.location + 'px'}" @dblclick="editwork(index)" draggable="true">
         <div class="blockhead">
             <p>{{bla(item.startTime)}}:00 - {{bla(item.endTime)}}:00</p>
             <span :class="{'badge':true,'badge-success':item.staus=='done','badge-warning':item.staus=='ing','badge-important':item.staus=='pending'}">{{item.staus == "done" ? "已完成" : item.staus == "ing" ? "處理中" : "未處理"}}</span>
+            <button class="close" @click="delwork(item.id)">&times;</button>
         </div>
         <span :class="{'label':true,'label-success':item.speed=='normal','label-warning':item.speed=='fast','label-important':item.speed=='faster'}">{{item.speed == "normal" ? "普通件" : item.speed == "fast" ? "速件" : "最速件"}}</span>
         <b>{{item.name}}</b>
     </div>
     <div class="text-center">
-    <h1>{{this.date.getMonth()+1}} 月 {{this.date.getDate()}} 日工作計劃表</h1>
-    <input class="btn" type="button" value="新增工作" @click="showmodal">
+    <h1>TODO 工作表</h1>
+    <input class="btn" type="button" value="新增工作" @click="showmodal('新增工作','新增')">
         <table class="table work">
             <thead>
                 <tr>
@@ -37,37 +42,37 @@ session_start();
     </div>
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: block;">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">新增工作</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="myModalLabel">{{work[0]}}</h3>
         </div>
-        <div class="modal-body">
-            <input class="addwork15" type="text" v-model="name" placeholder="工作名稱">
-            <select class="addwork" v-model="staus">
-                <option value="present" disabled selected>處理狀態</option>
+        <div class="modal-body addworkmodal">
+            <label for="name">工作名稱： </label>
+            <input class="addwork15" id="name" type="text" v-model="name"><br>
+            <label for="staus">處理狀態： </label>
+            <select class="addwork" id="staus" v-model="staus">
                 <option value="pending">未處理</option>
                 <option value="ing">處理中</option>
                 <option value="done">已完成</option>
-            </select>
-
-            <select class="addwork" v-model="speed">
-                <option value="present" disabled selected>優先順序</option>
+            </select><br>
+            <label for="speed">優先順序： </label>
+            <select class="addwork" id="speed" v-model="speed">
                 <option value="normal">普通件</option>
                 <option value="fast">速件</option>
                 <option value="faster">最速件</option>
-            </select>
-
-            <select class="addwork" v-model="startTime">
-                <option disabled selected>開始時間</option>
+            </select><br>
+            <label for="startTime">開始時間： </label>
+            <select class="addwork" id="startTime" v-model="startTime">
                 <option v-for="j in 25" :value="j-1" :disabled="j-1 >= endTime">{{ bla(j-1) }}:00</option>
-            </select>
-
-            <select class="addwork" v-model="endTime">
-                <option disabled selected>結束時間</option>
+            </select><br>
+            <label for="endTime">結束時間： </label>
+            <select class="addwork" id="endTime" v-model="endTime">
                 <option v-for="j in 25" :value="j-1" :disabled="j-1 <= startTime">{{ bla(j-1) }}:00</option>
-            </select>
+            </select><br>
+            <label for="workdata">工作內容： </label>
+            <textarea class="addwork15" id="workdata" v-model="workdata" cols="30" rows="10"></textarea>
         </div>
         <div class="modal-footer">
-            <input class="btn btn-primary" type="button" value="新增" @click="addwork">
+            <input class="btn btn-primary" type="button" :value="work[1]" @click="blabla">
             <button class="btn" data-dismiss="modal">關閉</button>
         </div>
     </div>
@@ -77,15 +82,17 @@ session_start();
         data() {
             return {
                 tiemlist:[],
-                date: new Date(),
                 data: [[]],
                 datalist:[],
+                edit:0,
                 time: [],
+                work:[],
                 name:"",
                 staus: "present",
                 speed: "present",
                 startTime: 0,
                 endTime: 24,
+                workdata: "",
                 userid: <?=$_SESSION["userid"]?>
             }
         },
@@ -101,7 +108,14 @@ session_start();
                 }
                 return num.toString()
             },
-            showmodal(){
+            showmodal(work,btn){
+                this.work = [work,btn]
+                this.name = ""
+                this.staus = "present"
+                this.speed = "present"
+                this.startTime = 0
+                this.endTime = 24
+                this.workdata = ""
                 $('#myModal').modal('show')
             },
             addwork(){
@@ -111,7 +125,34 @@ session_start();
                 }
                 const _this = this
                 $("#myModal").modal("toggle")
-                this.datalist.push({id:this.datalist.length+2,name: _this.name,staus: _this.staus,speed: _this.speed,startTime: _this.startTime,endTime: _this.endTime})
+                $.post("api.php?do=addwork",this.$data,function (a) {})
+                this.resettime()
+                this.loadworks()
+            },
+            editwork(idx){
+                this.work = ["工作編輯","儲存"]
+                this.name = this.datalist[idx].name
+                this.staus = this.datalist[idx].staus
+                this.speed = this.datalist[idx].speed
+                this.startTime = this.datalist[idx].startTime
+                this.endTime = this.datalist[idx].endTime
+                this.edit = this.datalist[idx].id
+                this.workdata = this.datalist[idx].workdata
+                $('#myModal').modal('show')
+            },
+            delwork(id){
+                $.post("api.php?do=delwork",{id:id},function (a){})
+                this.resettime()
+                this.loadworks()
+            },
+            blabla(){
+                return this.work[0] == "新增工作" ? this.addwork() : this.savework()
+            },
+            savework(){
+                $.post("api.php?do=savework",this.$data,function (a) {})
+                $('#myModal').modal('toggle')
+                this.resettime()
+                this.loadworks()
             },
             list(){
                 return this.datalist
@@ -120,34 +161,45 @@ session_start();
                 const _this = this
                 $.post("api.php?do=worklist",this.$data,function (a) {
                     a = JSON.parse(a)
-                    a.forEach(e=>{
-                        Object.assign(e,{location:0})
+                    a.forEach((e,idx)=>{
+                        for (i = 0; i < _this.time.length ; i++) {
+                            let bla = false
+                            for (j = e.startTime; j < e.endTime; j++) {
+                                if (_this.time[i][j-1]) bla = true
+                            }
+                            if (bla && i == _this.time.length -1){
+                                this.time.push([])
+                                for (j = 0; j < 24; j++) {
+                                    this.time[i].push(false)
+                                }
+                            }
+                            if (bla) continue
+                            Object.assign(e,{location:i})
+                            console.log(idx,i)
+                            for (j = e.startTime+1; j < e.endTime; j++) {
+                                _this.time[i][j-1] = true
+                            }
+                            break
+                        }
                     })
                     _this.datalist = a
-                    console.log(_this.datalist)
                 })
             },
-            workcheck(a){
-                let location = this.datalist[a].location
-                let newlocation = 0
-                if (a == 0) return location
-                for (i = this.datalist[a].startTime; i <= this.datalist[a].endTime; i++) {
-                    this.time[i].push(true)
+            resettime(){
+                this.time = []
+                for (i = 0; i < 10; i++) {
+                    this.time.push([])
+                    for (j = 0; j < 24; j++) {
+                        this.time[i].push(false)
+                    }
                 }
-                for (i = 0; i < a; i++) {
-                    if (this.datalist[a].startTime < this.datalist[i].endTime) newlocation = location + 1
-                }
-                for (i = 0; i < a; i++) {
-                    if (this.datalist[a].startTime >= this.datalist[i].endTime) newlocation = location
-                }
-                return newlocation
             }
         },
         mounted(){
             for (i = 0; i < 24 ; i+=2) {
                 this.tiemlist.push(i)
-                this.time.push([],[])
             }
+            this.resettime()
             this.loadworks()
             $("#myModal").modal("toggle")
             $("#myModal").modal("toggle")

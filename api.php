@@ -45,6 +45,15 @@ switch ($_GET['do']){
         $row = fetchall($result);
         echo json_encode($row);
         break;
+    case "addwork":
+        query("INSERT INTO works(userid, name, staus, speed, startTime, endTime, workdata) VALUES ({$P['userid']},'{$P['name']}','{$P['staus']}','{$P['speed']}','{$P['startTime']}','{$P['endTime']}','{$P['workdata']}')");
+        break;
+    case "savework":
+        query("UPDATE works SET name = '{$P['name']}', staus = '{$P['staus']}', speed = '{$P['speed']}', startTime = '{$P['startTime']}', endTime = '{$P['endTime']}', workdata = '{$P['workdata']}' WHERE id = {$P['edit']}");
+        break;
+    case "delwork":
+        query("DELETE FROM works WHERE id = {$P["id"]}");
+        break;
     case "changename":
         query("UPDATE user SET account='{$P["set"]}' WHERE id = {$P["userid"]}");
         break;

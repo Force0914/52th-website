@@ -8,11 +8,9 @@
 <div id="app" class="center">
     <div class="login">
         <h2 class="text-center">網站會員管理系統</h2>
-        <div>
-            <input type="text" placeholder="帳號" v-model="account"><br>
-            <input type="text" placeholder="密碼" v-model="password"><br>
-        </div>
-        <p>驗證碼</p><img :src=`gd.php?${this.v}` alt="captcha" @click="captcha()"><input style="width: 60%" class="btn" type="button" value="驗證碼重置" @click="resetlist"><br>
+        <input type="text" placeholder="帳號" v-model="account"><br>
+        <input class="pass" type="text" placeholder="密碼" v-model="password"><br>
+        <p>驗證碼</p><img :src=`gd.php?${this.v}` alt="captcha" @click="captcha()"><span>（點擊圖片更新驗證碼）</span><br>
         <div class="drogbox" v-show="list1.length > 0">
             <div class="drog" v-for="(item, index) in list1" :key="index" draggable="true" @dragstart="onStartDrag(index)">
                 {{ item }}
