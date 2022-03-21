@@ -13,32 +13,37 @@ if (!isset($_SESSION["userid"])){
 <body>
 <div id="app">
     <input type="button" value="登出" class="logout btn" @click="logout">
-    <div class="block" v-for="(item, index) in list()" :style="{'height': (item.endTime-item.startTime)*33.5 + 'px','z-index': 10,top:122 + (item.startTime) *33 + 'px','left': 100 + 175 * item.location + 'px'}" @dblclick="editwork(index)" draggable="true">
-        <div class="blockhead">
+    <div class="block" v-for="(item, index) in list()" :style="{'height': (item.endTime-item.startTime)*50 + 'px',top:241 + (item.startTime) *50 + 'px','left': 170 + 185 * item.location + 'px'}" @dblclick="editwork(index)" draggable="true">
+        <div class="blockhead" style="padding-top: 5px;padding-left: 5px">
             <p>{{bla(item.startTime)}}:00 - {{bla(item.endTime)}}:00</p>
             <span :class="{'badge':true,'badge-success':item.staus=='done','badge-warning':item.staus=='ing','badge-important':item.staus=='pending'}">{{item.staus == "done" ? "已完成" : item.staus == "ing" ? "處理中" : "未處理"}}</span>
             <button class="close" @click="delwork(item.id)">&times;</button>
         </div>
-        <span :class="{'label':true,'label-success':item.speed=='normal','label-warning':item.speed=='fast','label-important':item.speed=='faster'}">{{item.speed == "normal" ? "普通件" : item.speed == "fast" ? "速件" : "最速件"}}</span>
-        <b>{{item.name}}</b>
+        <div style="padding-left: 5px">
+            <span :class="{'label':true,'label-success':item.speed=='normal','label-warning':item.speed=='fast','label-important':item.speed=='faster'}">{{item.speed == "normal" ? "普通件" : item.speed == "fast" ? "速件" : "最速件"}}</span>
+            <b style="padding-left: 5px">{{item.name}}</b>
+        </div>
     </div>
     <div class="text-center">
+        <img src="img/logo.png" class="logo">
     <h1>TODO 工作表</h1>
     <input class="btn" type="button" value="新增工作" @click="showmodal('新增工作','新增')">
-        <table class="table work">
-            <thead>
+        <div class="line">
+            <table class="table table-striped work">
+                <thead>
                 <tr>
                     <td>時間</td>
-                    <td style="width: 100px">工作計畫</td>
+                    <td>工作計畫</td>
                 </tr>
-            </thead>
-            <tbody>
-                <tr v-for="i in tiemlist" @dragover.prevent @dragenter.prevent>
+                </thead>
+                <tbody @drop="onDrop(event)" @dragover.prevent @dragenter.preven>
+                <tr v-for="i in tiemlist">
                     <td>{{bla(i)}}:00-{{bla(i+2)}}:00</td>
                     <td></td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: block;">
         <div class="modal-header">
@@ -69,7 +74,7 @@ if (!isset($_SESSION["userid"])){
                 <option v-for="j in 25" :value="j-1" :disabled="j-1 <= startTime">{{ bla(j-1) }}:00</option>
             </select><br>
             <label for="workdata">工作內容： </label>
-            <textarea class="addwork15" id="workdata" v-model="workdata" cols="30" rows="10"></textarea>
+            <textarea class="addwork15" id="workdata" v-model="workdata" cols="30" rows="9"></textarea>
         </div>
         <div class="modal-footer">
             <input class="btn btn-primary" type="button" :value="work[1]" @click="blabla">
@@ -123,7 +128,6 @@ if (!isset($_SESSION["userid"])){
                     alert("欄位不得為空")
                     return
                 }
-                const _this = this
                 $("#myModal").modal("toggle")
                 $.post("api.php?do=addwork",this.$data,function (a) {})
                 this.resettime()
@@ -175,8 +179,7 @@ if (!isset($_SESSION["userid"])){
                             }
                             if (bla) continue
                             Object.assign(e,{location:i})
-                            console.log(idx,i)
-                            for (j = e.startTime+1; j < e.endTime; j++) {
+                            for (j = e.startTime; j < e.endTime; j++) {
                                 _this.time[i][j-1] = true
                             }
                             break
@@ -193,6 +196,9 @@ if (!isset($_SESSION["userid"])){
                         this.time[i].push(false)
                     }
                 }
+            },
+            onDrop(event){
+                console.log(event)
             }
         },
         mounted(){

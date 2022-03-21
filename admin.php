@@ -14,51 +14,54 @@ if ($_SESSION["groups"] != "admin"){
     <title>會員網站後台管理模組</title>
 </head>
 <body>
-<div class="container" id="app">
+<div class="container text-center" id="app">
+    <img src="img/logo.png" class="logo">
     <h1 class="center-title">會員網站後台管理模組</h1>
     <input type="button" value="登出" class="logout btn" @click="logout">
-    <table class="table">
-        <thead>
-        <tr>
-            <td>#</td>
-            <td>帳號</td>
-            <td>權限</td>
-            <td><input type="button" value="新增會員" class="btn" @click="createuser"></td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(item, index) in users">
-            <td>{{index + 1}}</td>
-            <td>{{item.account}}</td>
-            <td>{{item.groups == "admin" ? "管理員" : "使用者"}}</td>
-            <td>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">
-                        管理者功能
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">會員修改</a>
-                            <ul class="dropdown-menu">
-                                <li><a tabindex="-1" href="#" @click="changename(item.id)">更改帳號名稱</a></li>
-                                <li><a tabindex="-1" href="#" @click="changepassword(item.id)">更改密碼</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" @click="showlog(item.id)">登入登出紀錄</a></li>
+    <div class="line">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>#</td>
+                <td>帳號</td>
+                <td>權限</td>
+                <td><input type="button" value="新增會員" class="btn" @click="createuser"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(item, index) in users">
+                <td>{{index + 1}}</td>
+                <td>{{item.account}}</td>
+                <td>{{item.groups == "admin" ? "管理員" : "使用者"}}</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            管理者功能
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">會員修改</a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="#" @click="changename(item.id)">更改帳號名稱</a></li>
+                                    <li><a tabindex="-1" href="#" @click="changepassword(item.id)">更改密碼</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#" @click="showlog(item.id)">登入登出紀錄</a></li>
                             <li class="dropdown-submenu">
                                 <a tabindex="-1" href="#">權限修改</a>
                                 <ul class="dropdown-menu">
                                     <li><a tabindex="-1" href="#" @click="changegroups(item.id,item.groups == `admin` ? `user` : `admin`)">設為{{item.groups != "admin" ? "管理員" : "使用者"}}</a></li>
                                 </ul>
                             </li>
-                        <li><a href="#" @click="deluser(item.id)">會員刪除</a></li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                            <li><a href="#" @click="deluser(item.id)">會員刪除</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: block;">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

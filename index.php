@@ -7,7 +7,8 @@
 <body>
 <div id="app" class="center">
     <div class="login">
-        <h2 class="text-center">網站會員管理系統</h2>
+        <img src="img/logo.png" style="height: 30px;display: flex;margin: 0 auto" class="text-center" alt="">
+        <h1 class="text-center">網站會員管理系統</h1>
         <input type="text" placeholder="帳號" v-model="account"><br>
         <input class="pass" type="text" placeholder="密碼" v-model="password"><br>
         <p>驗證碼</p><img :src=`gd.php?${this.v}` alt="captcha" @click="captcha()"><span>（點擊圖片更新驗證碼）</span><br>
@@ -16,7 +17,7 @@
                 {{ item }}
             </div>
         </div>
-        <div class="drogbox" @drop="onDrop" @dragover.prevent @dragenter.prevent>
+        <div class="drogbox border" @drop="onDrop" @dragover.prevent @dragenter.prevent>
             <span v-if="list1.length == 4">將驗證碼依序拖移至此</span>
             <div class="drog" v-for="(item, index) in list2" :key="index">
                 {{ item }}
