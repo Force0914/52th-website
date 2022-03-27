@@ -13,7 +13,7 @@ if (!isset($_SESSION["userid"])){
 <body>
 <div id="app">
     <input type="button" value="登出" class="logout btn" @click="logout">
-    <div class="block" v-for="(item, index) in datalist" :style="{'height': (item.endTime-item.startTime)*50 + 'px',top:241 + (item.startTime) *50 + 'px','left': 170 + 185 * item.location + 'px'}" :id="'block' + index" @dblclick="editwork(index)" @dragstart="onStartDrag(index)" draggable="true">
+    <div class="block" v-for="(item, index) in datalist" :style="{'height': (item.endTime-item.startTime)*50 + 'px',top:241 + (item.startTime) *50 + 'px','left': 170 + 190 * item.location + 'px'}" :id="'block' + index" @dblclick="editwork(index)" @dragstart="onStartDrag(index)" draggable="true">
         <div class="blockhead" style="padding-top: 5px;padding-left: 5px">
             <p>{{bla(item.startTime)}}:00 - {{bla(item.endTime)}}:00</p>
             <span :class="{'badge':true,'badge-success':item.staus=='done','badge-warning':item.staus=='ing','badge-important':item.staus=='pending'}">{{item.staus == "done" ? "已完成" : item.staus == "ing" ? "處理中" : "未處理"}}</span>
@@ -39,7 +39,7 @@ if (!isset($_SESSION["userid"])){
                     <td>工作計畫</td>
                 </tr>
                 </thead>
-                <tbody @drop="ondrop($event)" @dragover="allowDrop($event)" @dragenter.preven>
+                <tbody @drop="blaload()" @dragover="allowDrop($event)" @dragenter.preven>
                 <tr v-for="i in tiemlist">
                     <td>{{bla(i)}}:00-{{bla(i+2)}}:00</td>
                     <td></td>
@@ -94,12 +94,14 @@ if (!isset($_SESSION["userid"])){
             <input class="addwork15" id="name" type="text" v-model="filterdata.name"><br>
             <label for="staus">處理狀態： </label>
             <select class="addwork" id="staus" v-model="filterdata.staus">
+                <option value="all">全部狀態</option>
                 <option value="pending">未處理</option>
                 <option value="ing">處理中</option>
                 <option value="done">已完成</option>
             </select><br>
             <label for="speed">優先順序： </label>
             <select class="addwork" id="speed" v-model="filterdata.speed">
+                <option value="all">全部狀態</option>
                 <option value="normal">普通件</option>
                 <option value="fast">速件</option>
                 <option value="faster">最速件</option>
@@ -140,8 +142,8 @@ if (!isset($_SESSION["userid"])){
                 workdata: "",
                 filterdata:{
                     name: "",
-                    staus: "",
-                    speed: "",
+                    staus: "all",
+                    speed: "all",
                     startTime: 0,
                     endTime: 24,
                     workdata: ""
@@ -192,6 +194,12 @@ if (!isset($_SESSION["userid"])){
                                     break
                                 case "endTime":
                                     if (e.endTime > papaya) blabla = false
+                                    break
+                                case "staus":
+                                    if (papaya != "all" && e.staus != papaya) blabla = false
+                                    break
+                                case "speed":
+                                    if (papaya != "all" && e.speed != papaya) blabla = false
                                     break
                                 default:
                                     if (papaya != ""){
@@ -273,9 +281,6 @@ if (!isset($_SESSION["userid"])){
                     $.post('api.php?do=savework',this.$data.datalist[this.movedata],function (e) {})
                 }
                 event.preventDefault()
-            },
-            ondrop(){
-                this.blaload()
             },
             blaload(){
                 this.resettime()
