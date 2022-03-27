@@ -49,6 +49,7 @@ switch ($_GET['do']){
         query("INSERT INTO works(userid, name, staus, speed, startTime, endTime, workdata) VALUES ({$P['userid']},'{$P['name']}','{$P['staus']}','{$P['speed']}','{$P['startTime']}','{$P['endTime']}','{$P['workdata']}')");
         break;
     case "savework":
+        $P['edit'] = $P['edit'] ?? $P['id'];
         query("UPDATE works SET name = '{$P['name']}', staus = '{$P['staus']}', speed = '{$P['speed']}', startTime = '{$P['startTime']}', endTime = '{$P['endTime']}', workdata = '{$P['workdata']}' WHERE id = {$P['edit']}");
         break;
     case "delwork":

@@ -13,7 +13,7 @@ if (!isset($_SESSION["userid"])){
 <body>
 <div id="app">
     <input type="button" value="登出" class="logout btn" @click="logout">
-    <div class="block" v-for="(item, index) in list()" :style="{'height': (item.endTime-item.startTime)*50 + 'px',top:241 + (item.startTime) *50 + 'px','left': 170 + 185 * item.location + 'px'}" @dblclick="editwork(index)" draggable="true">
+    <div class="block" v-for="(item, index) in datalist" :style="{'height': (item.endTime-item.startTime)*50 + 'px',top:241 + (item.startTime) *50 + 'px','left': 170 + 185 * item.location + 'px'}" :id="'block' + index" @dblclick="editwork(index)" @dragstart="onStartDrag(index)" draggable="true">
         <div class="blockhead" style="padding-top: 5px;padding-left: 5px">
             <p>{{bla(item.startTime)}}:00 - {{bla(item.endTime)}}:00</p>
             <span :class="{'badge':true,'badge-success':item.staus=='done','badge-warning':item.staus=='ing','badge-important':item.staus=='pending'}">{{item.staus == "done" ? "已完成" : item.staus == "ing" ? "處理中" : "未處理"}}</span>
@@ -36,7 +36,7 @@ if (!isset($_SESSION["userid"])){
                     <td>工作計畫</td>
                 </tr>
                 </thead>
-                <tbody @drop="onDrop(event)" @dragover.prevent @dragenter.preven>
+                <tbody @drop="ondrop($event)" @dragover="allowDrop($event)" @dragenter.preven>
                 <tr v-for="i in tiemlist">
                     <td>{{bla(i)}}:00-{{bla(i+2)}}:00</td>
                     <td></td>
@@ -83,6 +83,7 @@ if (!isset($_SESSION["userid"])){
     </div>
 </div>
 <script>
+
     let vue = Vue.createApp({
         data() {
             return {
@@ -98,7 +99,8 @@ if (!isset($_SESSION["userid"])){
                 startTime: 0,
                 endTime: 24,
                 workdata: "",
-                userid: <?=$_SESSION["userid"]?>
+                userid: <?=$_SESSION["userid"]?>,
+                movedata: -1
             }
         },
         methods:{
@@ -158,18 +160,15 @@ if (!isset($_SESSION["userid"])){
                 this.resettime()
                 this.loadworks()
             },
-            list(){
-                return this.datalist
-            },
             loadworks(){
                 const _this = this
-                $.post("api.php?do=worklist",this.$data,function (a) {
+                $.post("api.php?do=worklist",this.$data,async function (a) {
                     a = JSON.parse(a)
-                    a.forEach((e,idx)=>{
+                    await a.forEach((e)=>{
                         for (i = 0; i < _this.time.length ; i++) {
                             let bla = false
                             for (j = e.startTime; j < e.endTime; j++) {
-                                if (_this.time[i][j-1]) bla = true
+                                if (_this.time[i][j]) bla = true
                             }
                             if (bla && i == _this.time.length -1){
                                 this.time.push([])
@@ -180,7 +179,7 @@ if (!isset($_SESSION["userid"])){
                             if (bla) continue
                             Object.assign(e,{location:i})
                             for (j = e.startTime; j < e.endTime; j++) {
-                                _this.time[i][j-1] = true
+                                _this.time[i][j] = true
                             }
                             break
                         }
@@ -197,8 +196,24 @@ if (!isset($_SESSION["userid"])){
                     }
                 }
             },
-            onDrop(event){
-                console.log(event)
+            onStartDrag(idx){
+                this.movedata = idx
+            },
+            allowDrop(event){
+                let newTime = Math.floor((event.layerY - 241)/50)
+                if (this.datalist[this.movedata].startTime != newTime) {
+                    let timelong = this.datalist[this.movedata].endTime - this.datalist[this.movedata].startTime
+                    this.datalist[this.movedata].startTime = newTime >= 23 ? 23 : newTime
+                    this.datalist[this.movedata].endTime = (newTime + timelong) >= 24 ? 24 : (newTime + timelong)
+                    $.post('api.php?do=savework',this.$data.datalist[this.movedata],function (e) {
+                        console.log(e)
+                    })
+                }
+                event.preventDefault()
+            },
+            async ondrop(){
+                await this.resettime()
+                await this.loadworks()
             }
         },
         mounted(){
