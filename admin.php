@@ -62,10 +62,10 @@ if ($_SESSION["groups"] != "admin"){
             </tbody>
         </table>
     </div>
-    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: block;">
+    <div id="blaModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="blaModalLabel" aria-hidden="false" style="display: block;">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">登入登出紀錄</h3>
+            <h3 id="blaModalLabel">登入登出紀錄</h3>
         </div>
         <div class="modal-body">
             <table class="table">
@@ -161,7 +161,7 @@ if ($_SESSION["groups"] != "admin"){
             },
             showlog(userid){
                 this.show = userid
-                $('#myModal').modal('show')
+                $('#blaModal').modal('show')
             },
             updatedata(){
                 const _this = this
@@ -182,8 +182,8 @@ if ($_SESSION["groups"] != "admin"){
             }
         },
         mounted(){
-            $("#myModal").modal("toggle")
-            $("#myModal").modal("toggle")
+            $("#blaModal").modal("toggle")
+            $("#blaModal").modal("toggle")
             this.updatedata()
             this.updatelog()
         }

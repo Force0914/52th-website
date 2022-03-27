@@ -27,7 +27,10 @@ if (!isset($_SESSION["userid"])){
     <div class="text-center">
         <img src="img/logo.png" class="logo">
     <h1>TODO 工作表</h1>
-    <input class="btn" type="button" value="新增工作" @click="showmodal('新增工作','新增')">
+        <div class="btn-group">
+            <input class="btn" type="button" value="新增工作" @click="showmodal('新增工作','新增')">
+            <input class="btn" type="button" value="設定篩選條件" @click="filterModal()">
+        </div>
         <div class="line">
             <table class="table table-striped work">
                 <thead>
@@ -45,10 +48,10 @@ if (!isset($_SESSION["userid"])){
             </table>
         </div>
     </div>
-    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: block;">
+    <div id="blaModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="blaModalLabel" aria-hidden="false" style="display: block;">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3 id="myModalLabel">{{work[0]}}</h3>
+            <h3 id="blaModalLabel">{{work[0]}}</h3>
         </div>
         <div class="modal-body addworkmodal">
             <label for="name">工作名稱： </label>
@@ -81,6 +84,42 @@ if (!isset($_SESSION["userid"])){
             <button class="btn" data-dismiss="modal">關閉</button>
         </div>
     </div>
+    <div id="filterModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="blaModalLabel" aria-hidden="false" style="display: block;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="filterModalLabel">篩選條件</h3>
+        </div>
+        <div class="modal-body addworkmodal">
+            <label for="name">工作名稱： </label>
+            <input class="addwork15" id="name" type="text" v-model="filterdata.name"><br>
+            <label for="staus">處理狀態： </label>
+            <select class="addwork" id="staus" v-model="filterdata.staus">
+                <option value="pending">未處理</option>
+                <option value="ing">處理中</option>
+                <option value="done">已完成</option>
+            </select><br>
+            <label for="speed">優先順序： </label>
+            <select class="addwork" id="speed" v-model="filterdata.speed">
+                <option value="normal">普通件</option>
+                <option value="fast">速件</option>
+                <option value="faster">最速件</option>
+            </select><br>
+            <label for="startTime">開始時間： </label>
+            <select class="addwork" id="startTime" v-model="filterdata.startTime">
+                <option v-for="j in 25" :value="j-1" :disabled="j-1 >= filterdata.endTime">{{ bla(j-1) }}:00</option>
+            </select><br>
+            <label for="endTime">結束時間： </label>
+            <select class="addwork" id="endTime" v-model="filterdata.endTime">
+                <option v-for="j in 25" :value="j-1" :disabled="j-1 <= filterdata.startTime">{{ bla(j-1) }}:00</option>
+            </select><br>
+            <label for="workdata">工作內容： </label>
+            <textarea class="addwork15" id="workdata" v-model="filterdata.workdata" cols="30" rows="9"></textarea>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-primary" type="button" value="篩選" data-dismiss="modal" @click="blaload()">
+            <button class="btn" data-dismiss="modal">關閉</button>
+        </div>
+    </div>
 </div>
 <script>
 
@@ -94,11 +133,19 @@ if (!isset($_SESSION["userid"])){
                 time: [],
                 work:[],
                 name:"",
-                staus: "present",
-                speed: "present",
+                staus: "",
+                speed: "",
                 startTime: 0,
                 endTime: 24,
                 workdata: "",
+                filterdata:{
+                    name: "",
+                    staus: "",
+                    speed: "",
+                    startTime: 0,
+                    endTime: 24,
+                    workdata: ""
+                },
                 userid: <?=$_SESSION["userid"]?>,
                 movedata: -1
             }
@@ -118,53 +165,42 @@ if (!isset($_SESSION["userid"])){
             showmodal(work,btn){
                 this.work = [work,btn]
                 this.name = ""
-                this.staus = "present"
-                this.speed = "present"
+                this.staus = ""
+                this.speed = ""
                 this.startTime = 0
                 this.endTime = 24
                 this.workdata = ""
-                $('#myModal').modal('show')
+                $('#blaModal').modal('show')
             },
-            addwork(){
-                if (this.name == "" || this.staus == "present" || this.speed == "present"){
-                    alert("欄位不得為空")
-                    return
-                }
-                $("#myModal").modal("toggle")
-                $.post("api.php?do=addwork",this.$data,function (a) {})
-                this.resettime()
-                this.loadworks()
+            filterModal(){
+                $('#filterModal').modal('show')
             },
-            editwork(idx){
-                this.work = ["工作編輯","儲存"]
-                this.name = this.datalist[idx].name
-                this.staus = this.datalist[idx].staus
-                this.speed = this.datalist[idx].speed
-                this.startTime = this.datalist[idx].startTime
-                this.endTime = this.datalist[idx].endTime
-                this.edit = this.datalist[idx].id
-                this.workdata = this.datalist[idx].workdata
-                $('#myModal').modal('show')
-            },
-            delwork(id){
-                $.post("api.php?do=delwork",{id:id},function (a){})
-                this.resettime()
-                this.loadworks()
-            },
-            blabla(){
-                return this.work[0] == "新增工作" ? this.addwork() : this.savework()
-            },
-            savework(){
-                $.post("api.php?do=savework",this.$data,function (a) {})
-                $('#myModal').modal('toggle')
-                this.resettime()
-                this.loadworks()
-            },
-            loadworks(){
+            filterwork(){
                 const _this = this
-                $.post("api.php?do=worklist",this.$data,async function (a) {
-                    a = JSON.parse(a)
-                    await a.forEach((e)=>{
+                let filterdata = this.filterdata
+                let filterrow = []
+                $.post("api.php?do=worklist",this.$data,async function (b) {
+                    b = JSON.parse(b)
+                    await b.forEach((e)=>{
+                        let blabla = true
+                        for (let bruh in filterdata) {
+                            let papaya = filterdata[bruh]
+                            if (!blabla) break
+                            switch (bruh) {
+                                case "startTime":
+                                    if (e.startTime < papaya) blabla = false
+                                    break
+                                case "endTime":
+                                    if (e.endTime > papaya) blabla = false
+                                    break
+                                default:
+                                    if (papaya != ""){
+                                        if(e[bruh].indexOf(papaya) == -1) blabla = false
+                                    }
+                                    break
+                            }
+                        }
+                        if (!blabla) return
                         for (i = 0; i < _this.time.length ; i++) {
                             let bla = false
                             for (j = e.startTime; j < e.endTime; j++) {
@@ -178,14 +214,43 @@ if (!isset($_SESSION["userid"])){
                             }
                             if (bla) continue
                             Object.assign(e,{location:i})
+                            filterrow.push(e)
                             for (j = e.startTime; j < e.endTime; j++) {
                                 _this.time[i][j] = true
                             }
                             break
                         }
                     })
-                    _this.datalist = a
+                    _this.datalist = filterrow
                 })
+            },
+            addwork(){
+                if (this.name == "" || this.staus == "" || this.speed == ""){
+                    alert("欄位不得為空")
+                    return
+                }
+                $("#blaModal").modal("toggle")
+                $.post("api.php?do=addwork",this.$data,function (a) {})
+                this.blaload()
+            },
+            editwork(idx){
+                this.work = ["工作編輯","儲存"]
+                for (let bruh in this.datalist[idx]) {
+                    this[bruh] = this.datalist[idx][bruh]
+                }
+                $('#blaModal').modal('show')
+            },
+            delwork(id){
+                $.post("api.php?do=delwork",{id:id},function (a){})
+                this.blaload()
+            },
+            blabla(){
+                return this.work[0] == "新增工作" ? this.addwork() : this.savework()
+            },
+            savework(){
+                $.post("api.php?do=savework",this.$data,function (a) {})
+                $("#blaModal").modal("toggle")
+                this.blaload()
             },
             resettime(){
                 this.time = []
@@ -205,25 +270,27 @@ if (!isset($_SESSION["userid"])){
                     let timelong = this.datalist[this.movedata].endTime - this.datalist[this.movedata].startTime
                     this.datalist[this.movedata].startTime = newTime >= 23 ? 23 : newTime
                     this.datalist[this.movedata].endTime = (newTime + timelong) >= 24 ? 24 : (newTime + timelong)
-                    $.post('api.php?do=savework',this.$data.datalist[this.movedata],function (e) {
-                        console.log(e)
-                    })
+                    $.post('api.php?do=savework',this.$data.datalist[this.movedata],function (e) {})
                 }
                 event.preventDefault()
             },
-            async ondrop(){
-                await this.resettime()
-                await this.loadworks()
-            }
+            ondrop(){
+                this.blaload()
+            },
+            blaload(){
+                this.resettime()
+                this.filterwork()
+            },
         },
         mounted(){
             for (i = 0; i < 24 ; i+=2) {
                 this.tiemlist.push(i)
             }
-            this.resettime()
-            this.loadworks()
-            $("#myModal").modal("toggle")
-            $("#myModal").modal("toggle")
+            this.blaload()
+            $("#blaModal").modal("toggle")
+            $("#blaModal").modal("toggle")
+            $("#filterModal").modal("toggle")
+            $("#filterModal").modal("toggle")
         }
     }).mount('#app')
 </script>
