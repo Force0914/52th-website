@@ -243,6 +243,7 @@ if (!isset($_SESSION["userid"])){
             },
             editwork(idx){
                 this.work = ["工作編輯","儲存"]
+                this.edit = this.datalist[idx].id
                 for (let bruh in this.datalist[idx]) {
                     this[bruh] = this.datalist[idx][bruh]
                 }
@@ -276,9 +277,9 @@ if (!isset($_SESSION["userid"])){
                 let newTime = Math.floor((event.layerY - 241)/50)
                 if (this.datalist[this.movedata].startTime != newTime) {
                     let timelong = this.datalist[this.movedata].endTime - this.datalist[this.movedata].startTime
-                    this.datalist[this.movedata].startTime = newTime >= 23 ? 23 : newTime
+                    this.datalist[this.movedata].startTime = newTime >= 23 ? 23 : (newTime + timelong) >= 24 ? (24 - timelong) : newTime
                     this.datalist[this.movedata].endTime = (newTime + timelong) >= 24 ? 24 : (newTime + timelong)
-                    $.post('api.php?do=savework',this.$data.datalist[this.movedata],function (e) {})
+                    $.post('api.php?do=updatetime',this.$data.datalist[this.movedata],function (e) {})
                 }
                 event.preventDefault()
             },
