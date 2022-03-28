@@ -124,7 +124,6 @@ if (!isset($_SESSION["userid"])){
     </div>
 </div>
 <script>
-
     let vue = Vue.createApp({
         data() {
             return {
