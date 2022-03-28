@@ -149,6 +149,14 @@ if ($_SESSION["groups"] != "admin"){
                     alert("帳號不可為空")
                     return
                 }
+                let has = false
+                this.users.forEach(e=>{
+                    if (e.account == account) has = true
+                })
+                if (has){
+                    alert("帳號已存在, 無法創建此帳號")
+                    return;
+                }
                 let password = prompt("請輸入使用者的密碼")
                 if (password == null){
                     alert("密碼不可為空")
