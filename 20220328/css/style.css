@@ -60,8 +60,13 @@ p{
     color: white;
 }
 
+.btn-group.open .dropdown-toggle{
+    background-color: #a22127 !important;
+    color: white;
+}
+
 .captcha{
-    zoom:300%
+    zoom: 200%
 }
 
 .block{

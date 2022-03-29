@@ -46,7 +46,7 @@ switch ($_GET['do']){
         echo json_encode($row);
         break;
     case "addwork":
-        query("INSERT INTO works(userid, name, staus, speed, startTime, endTime, workdata) VALUES ({$P['userid']},'{$P['name']}','{$P['staus']}','{$P['speed']}','{$P['startTime']}','{$P['endTime']}','{$P['workdata']}')");
+        query("INSERT INTO works(userid, name, staus, speed, date, startTime, endTime, workdata) VALUES ({$P['userid']},'{$P['name']}','{$P['staus']}','{$P['speed']}','{$P['date']}','{$P['startTime']}','{$P['endTime']}','{$P['workdata']}')");
         break;
     case "savework":
         query("UPDATE works SET name = '{$P['name']}', staus = '{$P['staus']}', speed = '{$P['speed']}', startTime = '{$P['startTime']}', endTime = '{$P['endTime']}', workdata = '{$P['workdata']}' WHERE id = {$P['edit']}");

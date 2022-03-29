@@ -26,9 +26,10 @@ if (!isset($_SESSION["userid"])){
     </div>
     <div class="text-center">
         <img src="img/logo.png" class="logo">
-    <h1>TODO 工作表</h1>
+    <h1>{{ date.split("-").join("/") }} TODO 工作表</h1>
         <div class="btn-group">
             <input class="btn" type="button" value="新增工作" @click="showmodal('新增工作','新增')">
+            <input style="margin: 0" type="date" v-model="date" @input="blaload()">
             <input class="btn" type="button" value="設定篩選條件" @click="filterModal()">
         </div>
         <div class="line">
@@ -127,13 +128,14 @@ if (!isset($_SESSION["userid"])){
     let vue = Vue.createApp({
         data() {
             return {
+                date: this.formatdate(),
                 tiemlist:[],
                 data: [[]],
                 datalist:[],
                 edit:0,
                 time: [],
                 work:[],
-                name:"",
+                name: "",
                 staus: "",
                 speed: "",
                 startTime: 0,
@@ -152,6 +154,13 @@ if (!isset($_SESSION["userid"])){
             }
         },
         methods:{
+            formatdate(){
+                let date = new Date().toLocaleDateString().split("/")
+                date.forEach((e, idx)=>{
+                    date[idx] = this.bla(e)
+                })
+                return date.join("-")
+            },
             logout(){
                 $.get("api.php?do=logout",function (){})
                 alert("登出成功");
@@ -180,6 +189,7 @@ if (!isset($_SESSION["userid"])){
                 const _this = this
                 let filterdata = this.filterdata
                 let filterrow = []
+                if (this.date == "") this.date = this.formatdate()
                 $.post("api.php?do=worklist",this.$data,async function (b) {
                     b = JSON.parse(b)
                     await b.forEach((e)=>{
@@ -207,7 +217,7 @@ if (!isset($_SESSION["userid"])){
                                     break
                             }
                         }
-                        if (!blabla) return
+                        if (!blabla || e.date != _this.date) return
                         for (i = 0; i < _this.time.length ; i++) {
                             let bla = false
                             for (j = e.startTime; j < e.endTime; j++) {
