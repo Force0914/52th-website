@@ -8,8 +8,8 @@
     <div class="login">
         <img src="img/logo.png" class="logo">
         <h1>網站會員管理系統</h1>
-        <input type="text" placeholder="帳號" v-model="account">
-        <input type="text" placeholder="密碼" class="fakepassword" v-model="password">
+        <input type="text" placeholder="帳號" class="newinput" v-model="account">
+        <input type="text" placeholder="密碼" class="newinput fakepassword" v-model="password">
         <img :src=`gd.php?${v}` class="captcha" @click="captcha()"><p>(點擊圖片更新驗證碼)</p>
         <div class="block" v-show="list1.length != 0">
             <div class="cblock" v-for="(item, index) in list1" :key="index" draggable="true" @dragstart="ondrag($event,index)">{{item}}</div>
@@ -76,6 +76,7 @@
                     }else{
                         alert(e)
                         _this.err()
+                        _this.captcha()
                     }
                 })
             }

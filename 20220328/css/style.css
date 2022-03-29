@@ -31,14 +31,14 @@ p{
     margin-bottom: 10px;
 }
 
-.login > input[type='text'] {
-    font-size: 18px;
+.newinput{
+    font-size: 18px !important;
     width: 100%;
-    border: unset;
-    box-shadow: unset;
-    border-radius: unset;
-    height: 40px;
-    border-bottom: solid 1px #ccc;
+    border: unset !important;
+    box-shadow: unset !important;
+    border-radius: unset !important;
+    height: 40px !important;
+    border-bottom: solid 1px #ccc !important;
 }
 
 .login > input[type='button']{
@@ -90,4 +90,75 @@ p{
     width: 40px;
     border: solid 1px #ccc;
     border-radius: 8px;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.logout{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.table-border{
+    border: solid 1px #c0262d;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.width100{
+    width: 100%;
+}
+
+.width80{
+    width: 80%;
+    min-width: 80% !important;
+    max-width: 80% !important;
+}
+
+.work{
+    width: 90%;
+    margin: 10px auto;
+    border: solid 1px #c0262d;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.work > table > tbody > tr{
+    height: 100px !important;
+}
+
+.workblock{
+    position: absolute;
+    width: 170px;
+    color: white;
+    background: rgba(192, 38, 45, 0.54);
+    border-left: solid 5px #c0262d;
+    border-radius: 8px;
+}
+
+.bruh{
+    margin: 5px;
+}
+
+.workblock-head{
+    display: flex;
+    justify-content: space-between;
+}
+
+.workblock-head > p{
+    line-height: 14px;
+    margin: 0;
+}
+
+.workblock-body{
+    text-align: left;
+}
+
+.workblock-body > p{
+    line-height: 14px;
+    margin: 0;
+    margin-left: 5px;
 }

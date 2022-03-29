@@ -31,27 +31,27 @@ switch ($_GET['do']){
         echo "登出成功";
         break;
     case "userlog":
-        $result = query("SELECT * FROM user WHERE userid = {$P['id']}");
+        $result = query("SELECT * FROM userlog WHERE userid = {$P['userid']}");
         $row = fetchall($result);
         echo json_encode($row);
         break;
     case "adduser":
-        query("INSERT INTO user(account, password) VALUES ('{$P['account']}','{$P['password']}')");
+        query("INSERT INTO user(account, password, groups) VALUES ('{$P['account']}','{$P['password']}','{$P['groups']}')");
         break;
     case "edituser":
         query("UPDATE user SET account='{$P['account']}',password='{$P['password']}]',groups='{$P['groups']}' WHERE id = {$P['id']}");
         break;
     case "deluser":
-        echo "deluser";
+        query("DELETE FROM user WHERE id = {$P['userid']}");
         break;
     case "addwork":
-        echo "addwork";
+        query("INSERT INTO works(userid, name, date, startTime, endTime, status, speed, description) VALUES ({$P['userid']},'{$P['name']}','{$P['date']}','{$P['startTime']}','{$P['endTime']}','{$P['status']}','{$P['speed']}','{$P['description']}')");
         break;
     case "editwork":
-        echo "editwork";
+        query("UPDATE works SET name='{$P['name']}',startTime='{$P['startTime']}',endTime='{$P['endTime']}',status='{$P['status']}',speed='{$P['speed']}',description='{$P['description']}' WHERE id = {$P['id']}");
         break;
     case "delwork":
-        echo "delwork";
+        query("DELETE FROM works WHERE id = {$P['id']}");
         break;
     case "userlist":
         $result = query("SELECT * FROM user");
