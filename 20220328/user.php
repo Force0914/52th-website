@@ -40,7 +40,7 @@ session_start();
             </thead>
             <tbody>
             <tr v-for="(item, index) in time" @drop="drop()" @dragover="allowdrag($event)" @dragenter.preven>
-                <td>{{item}}:00-{{item+2}}:00</td>
+                <td>{{bla(item)}}:00-{{bla(item+2)}}:00</td>
                 <td></td>
             </tr>
             </tbody>

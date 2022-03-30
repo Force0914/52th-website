@@ -1,0 +1,85 @@
+*{
+    user-select: none;
+}
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-block{
+    border: solid 1px #c0262d;
+    border-radius: 8px;
+    width: 400px;
+    padding: 20px;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.logo{
+    height: 50px;
+}
+
+.logout{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.captcha{
+    border: solid 1px #ccc;
+    height: 50px;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.dragbox{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ccc;
+    font-size: 18px;
+    border: solid 1px #ccc;
+    border-radius: 8px;
+}
+
+.textbox{
+    width: calc(100% - 20px);
+    height: 40px !important;
+    border: unset !important;
+    border-radius: unset !important;
+    box-shadow: unset !important;
+    font-size: 18px !important;
+    color: #ccc;
+    border-bottom: solid 1px #ccc !important;
+}
+
+.fakepassword{
+    -webkit-text-security: disc;
+}
+
+p{
+    display: unset;
+}
+
+.btn{
+    background: #c0262d;
+    color: white;
+    height: 40px;
+}
+
+.btn:active,.btn:hover{
+    background: #7a181c;
+    color: white;
+    height: 40px;
+}
