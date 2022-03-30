@@ -48,7 +48,7 @@ session_start();
     </div>
     <div id="workModal" class="modal fade hide" tabindex="-1">
         <div class="modal-header">
-            <butoon class="close" data-dismiss="modal">&times;</butoon>
+            <button class="close" data-dismiss="modal">&times;</button>
             <h3>工作編輯</h3>
         </div>
         <div class="modal-body">
@@ -84,7 +84,7 @@ session_start();
     </div>
     <div id="filterModal" class="modal fade hide" tabindex="-1">
         <div class="modal-header">
-            <butoon class="close" data-dismiss="modal">&times;</butoon>
+            <button class="close" data-dismiss="modal">&times;</button>
             <h3>工作編輯</h3>
         </div>
         <div class="modal-body">
