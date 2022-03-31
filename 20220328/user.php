@@ -8,7 +8,7 @@ session_start();
 </head>
 <body>
 <div class="text-center" id="app">
-    <div class="workblock" v-for="(item, index) in workdata" :style="{'height':(item.endTime-item.startTime)*50+'px','top': 259+item.startTime*50+'px','left':190+175*item.location+'px'}" @dragstart="dragstart(index)" draggable="true" @dblclick="showmodal('edit',index)">
+    <div class="workblock" v-for="(item, index) in workdata" :style="{'height':(item.endTime-item.startTime)*50+'px','top': 259+item.startTime*50+'px','left':210+175*item.location+'px'}" @dragstart="dragstart(index)" draggable="true" @dblclick="showmodal('edit',index)">
         <div class="bruh">
             <div class="workblock-head">
                 <p>{{bla(item.startTime)}}:00-{{bla(item.endTime)}}:00</p>
@@ -92,12 +92,14 @@ session_start();
             <input class="width80" style="height: 30px" type="text" v-model="filterdata.name">
             <label>處理情形</label>
             <select class="width80" v-model="filterdata.status">
+                <option value="all">全部狀態</option>
                 <option value="a">未處理</option>
                 <option value="b">處理中</option>
                 <option value="c">已完成</option>
             </select>
             <label>優先情形</label>
             <select class="width80" v-model="filterdata.speed">
+                <option value="all">全部狀態</option>
                 <option value="a">普通件</option>
                 <option value="b">速件</option>
                 <option value="c">最速件</option>

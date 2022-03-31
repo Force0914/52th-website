@@ -43,10 +43,10 @@ switch ($_GET['do']){
         query("UPDATE user SET account='{$P['account']}',password='{$P['password']}',groups='{$P['groups']}' WHERE id = {$P['id']}");
         break;
     case "deluser":
-        query("DELETE FROM user WHERE id = {$P['id']}");
+        query("DELETE FROM user WHERE id = {$P['userid']}");
         break;
     case "worklist":
-        echo json_encode(fetchAll(query("SELECT * FROM works WHERE userid = {$P['userid']}")));
+        echo json_encode(fetchAll(query("SELECT * FROM works WHERE userid = {$P['userid']} ORDER BY startTime")));
         break;
     case "addwork":
         query("INSERT INTO works(userid, name, date, startTime, endTime, speed, status, description) VALUES ('{$P['userid']}','{$P['name']}','{$P['date']}','{$P['startTime']}','{$P['endTime']}','{$P['speed']}','{$P['status']}','{$P['description']}')");
@@ -55,6 +55,6 @@ switch ($_GET['do']){
         query("UPDATE works SET name='{$P['name']}', startTime='{$P['startTime']}',endTime='{$P['endTime']}',speed='{$P['speed']}',status='{$P['status']}',description='{$P['description']}' WHERE id = {$P['id']}");
         break;
     case "delwork":
-        quert("DELETE FROM works WHERE id = {$P['id']}");
+        query("DELETE FROM works WHERE id = {$P['id']}");
         break;
 }

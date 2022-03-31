@@ -72,14 +72,72 @@ p{
     display: unset;
 }
 
+.login-block > .btn{
+    height: 40px;
+}
+
 .btn{
     background: #c0262d;
     color: white;
-    height: 40px;
 }
 
 .btn:active,.btn:hover{
     background: #7a181c;
     color: white;
-    height: 40px;
+}
+
+.btn-group.open .btn.dropdown-toggle{
+    background: #7a181c;
+}
+
+.table-border{
+    border: solid 1px #c0262d;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    margin: 20px auto;
+}
+
+.work > tbody > tr{
+    height: 100px;
+}
+
+.block{
+    color: #c0262d;
+    position: absolute;
+    border-radius: 8px;
+    width: 170px;
+    background: rgba(192, 38, 45, 0.3);
+    border-left: solid 5px #c0262d;
+}
+
+.block-padding{
+    padding: 5px;
+}
+
+.block-head{
+    display: flex;
+    justify-content: space-between;
+}
+
+.block-head >p{
+    line-height: 18px;
+    margin: 0;
+}
+
+.block-body{
+    display: flex;
+    justify-content: left;
+}
+
+.block-body > b{
+    line-height: 18px;
+    margin: 0;
+    margin-left: 5px;
+}
+
+.width80{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
 }
