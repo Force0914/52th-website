@@ -1,0 +1,140 @@
+*{
+ user-select: none;
+}
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-block{
+    border: solid 1px #c0262d;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+}
+
+.newinput{
+    width: 100%;
+    border: unset !important;
+    border-radius: unset !important;
+    box-shadow: unset !important;
+    font-size: 18px !important;
+    height: 40px !important;
+    border-bottom: solid 1px #ccc !important;
+}
+
+.logo{
+    height: 50px;
+}
+
+.dragblock{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: solid 1px #ccc;
+    width: 100%;
+    height: 50px;
+    margin: 5px 0;
+    border-radius: 8px;
+}
+
+.drag{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px #ccc;
+    width: 40px;
+    height: 40px;
+    color: #ccc;
+    border-radius: 8px;
+}
+
+.text-center{
+    text-align: center;
+}
+
+p{
+    display: unset;
+}
+
+.btn{
+    background: #c0262d;
+    color: white;
+}
+
+.btn:hover,.btn:active{
+    background: #70161a;
+    color: white;
+}
+
+.btn-group.open .dropdown-toggle{
+     background: #70161a !important;
+     color: white;
+}
+
+.login-block > .btn {
+    margin: 10px 0;
+    width: 100%;
+    height: 40px;
+}
+
+.table-border{
+    width: 90%;
+    border: solid 1px #c0262d;
+    border-radius: 8px;
+    padding:20px;
+    margin: 0 auto;
+}
+
+.fakepassword{
+    -webkit-text-security: disc;
+}
+
+.logout{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.work > tbody > tr{
+    height: 100px !important;
+}
+
+.block{
+    width: 170px;
+    height: 50px;
+    position: absolute;
+    background: rgba(192, 38, 45, 0.3);
+    border-left: solid 5px #c0262d;
+    border-radius: 8px;
+}
+
+.block > div{
+    margin: 5px;
+    color: #c0262d;
+}
+
+.block-head{
+    display: flex;
+    justify-content: space-around;
+}
+
+.block-head > p{
+    margin: 0 !important;
+}
+
+.block > div > div > p{
+    line-height: 18px !important;
+}
+
+.block-body{
+    display: flex;
+}
+
+.block-body > b{
+    line-height: 18px !important;
+    margin: 0 5px !important;
+}
