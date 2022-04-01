@@ -162,7 +162,8 @@
                 this.blaload()
             },
             addwork(){
-              this.edit = this.formateedit
+                const format = this.formateedit
+              this.edit = format
               this.edit.userid = this.userid
                 $('#editworkModal').modal("show")
             },
