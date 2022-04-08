@@ -85,7 +85,6 @@
             </table>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" @click="save()">儲存</button>
             <button class="btn" data-dismiss="modal" @click="userlist()">取消</button>
         </div>
     </div>

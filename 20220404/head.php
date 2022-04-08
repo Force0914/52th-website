@@ -1,6 +1,5 @@
 <?php
 session_start();
-include ('pdo.php');
 ?>
 <meta charset="UTF-8">
 <meta name="viewport"
@@ -9,6 +8,5 @@ include ('pdo.php');
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/style.css">
 <script src="js/jquery-3.6.0.min.js"></script>
-<!--<script src="js/kjAjax.js"></script>-->
 <script src="js/bootstrap.min.js"></script>
 <title>TODO 工作管理系統</title>
