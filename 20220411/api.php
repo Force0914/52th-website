@@ -1,13 +1,13 @@
 <?php
 session_start();
-include('pdo.php');
 $p = $_POST;
+include ("pdo.php");
 switch($_GET['do']){
     case "login":
         $result = query("SELECT * FROM user WHERE account = '{$p['account']}'");
         $row = fetch($result);
         if (rownum($result) >= 1){
-            if ($p['password'] == $row['password']){
+            if ($row['password'] == $p['password']){
                 if (join($p['list2'] ?? []) == $p['v']){
                     $_SESSION['userid'] = $row['id'];
                     query("INSERT INTO userlog(userid,action) VALUES ({$row['id']},'登入成功')");
@@ -32,28 +32,28 @@ switch($_GET['do']){
     case "userlist":
         echo json_encode(fetchAll(query("SELECT * FROM user")));
         break;
-    case "userlog":
-        echo  json_encode(fetchAll(query("SELECT * FROM userlog WHERE userid = {$p['id']}")));
-        break;
     case "adduser":
         query("INSERT INTO user(account,password,groups) VALUES ('{$p['account']}','{$p['password']}','{$p['groups']}')");
         break;
     case "edituser":
-        query("UPDATE user SET account='{$p['account']}',password='{$p['password']}',groups='{$p['groups']}' WHERE id = {$p['id']}");
+        query("UPDATE user SET account = '{$p['account']}', password = '{$p['password']}',groups='{$p['groups']}' WHERE id = {$p['id']}");
         break;
     case "deluser":
         query("DELETE FROM user WHERE id = {$p['id']}");
         break;
-    case "worklist":
-        echo json_encode(fetchAll(query("SELECT * FROM work WHERE userid = {$p['userid']} ORDER BY startTime")));
+    case "userlog":
+        echo json_encode(fetchAll(query("SELECT * FROM userlog WHERE userid = {$p['id']}")));
         break;
-    case "addwork":
-        query("INSERT INTO work(userid, name, date, startTime, endTime, speed, status, description) VALUES ('{$p['userid']}','{$p['name']}','{$p['date']}','{$p['startTime']}','{$p['endTime']}','{$p['speed']}','{$p['status']}','{$p['description']}')");
+    case "worklist":
+        echo json_encode(fetchAll(query("SELECT * FROM works WHERE userid = {$p['userid']} ORDER BY startTime")));
+        break;
+    case"addwork":
+        query("INSERT INTO works(userid,name,date,startTime,endTime,speed,status,description) VALUES ({$p['userid']},'{$p['name']}','{$p['date']}','{$p['startTime']}','{$p['endTime']}','{$p['speed']}','{$p['status']}','{$p['description']}')");
         break;
     case "editwork":
-        query("UPDATE work SET name='{$p['name']}',date='{$p['date']}',startTime='{$p['startTime']}',endTime='{$p['endTime']}',speed='{$p['speed']}',status='{$p['status']}',description='{$p['description']}' WHERE id = {$p['id']}");
+        query("UPDATE works SET name='{$p['name']}',startTime='{$p['startTime']}',endTime='{$p['endTime']}',speed='{$p['speed']}',status='{$p['status']}',description='{$p['description']}' WHERE id = {$p['id']}");
         break;
-    case "delwork":
-        query("DELETE FROM work WHERE id = {$p['id']}");
+    case"delwork":
+        query("DELETE FROM works WHERE id = {$p['id']}");
         break;
 }

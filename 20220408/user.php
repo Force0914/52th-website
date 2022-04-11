@@ -220,7 +220,9 @@
             },
             addwork(){
                 this.edit = {}
-                this.edit = this.filterdata
+                this.edit = this.formateedit
+                this.edit.userid = this.userid
+                this.edit.date = this.date
                 $('#editmodal').modal('show')
             },
             editwork(idx){
@@ -234,10 +236,8 @@
             save(){
                 if (this.edit.id == -1){
                     $.post('api.php?do=addwork',this.$data.edit,function () {})
-                    alert('新增成功')
                 }else{
                     $.post('api.php?do=editwork',this.$data.edit,function () {})
-                    alert('編輯成功')
                 }
                 this.blaload()
             },
