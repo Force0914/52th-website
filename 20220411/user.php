@@ -22,11 +22,11 @@
                 <div class="block-padding">
                     <div class="block-head">
                         <p>{{bla(item.startTime)}}:00-{{bla(item.endTime)}}:00</p>
-                        <span class="badge">{{item.status == "a" ? "未處理" : item.status == "b" ? "處理中" : "已完成"}}</span>
+                        <span :class="{'badge':true, 'badge-warning':item.status == 'a' ,'badge-info':item.status == 'b','badge-success':item.status == 'c'}">{{item.status == "a" ? "未處理" : item.status == "b" ? "處理中" : "已完成"}}</span>
                         <button class="close" @click="delwork(item.id)">&times;</button>
                     </div>
                     <div class="block-body">
-                        <span class="badge">{{item.speed == "a" ? "普通件" : item.speed == "b" ? "速件" : "最速件"}}</span>
+                        <span :class="{'badge':true, 'badge-warning':item.speed == 'a' ,'badge-info':item.speed == 'b','badge-success':item.speed == 'c'}">{{item.speed == "a" ? "普通件" : item.speed == "b" ? "速件" : "最速件"}}</span>
                         <b>{{item.name}}</b>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     <thead>
                         <tr>
                             <td>時間</td>
-                            <td>工作計畫</td>
+                            <td><p style="float: left;margin: 0 !important;">工作計畫</p><p style="float: right;margin: 0 !important;">(雙擊工作計畫用以編輯)</p></td>
                         </tr>
                     </thead>
                     <tbody class="work">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="modal-body">
                     <label>工作名稱</label>
-                    <input type="text" class="width80" v-model="edit.name">
+                    <input type="text" class="width15" v-model="edit.name">
                     <label>處理狀態</label>
                     <select class="width80" v-model="edit.status">
                         <option value="a">未處理</option>
@@ -76,7 +76,7 @@
                         <option v-for="i in 25" :value="i-1" :disabled="i-1 <= edit.startTime">{{bla(i-1)}}:00</option>
                     </select>
                     <label>工作內容</label>
-                    <textarea cols="30" rows="10" class="width80" v-model="edit.description"></textarea>
+                    <textarea cols="30" rows="10" class="width15" v-model="edit.description"></textarea>
                 </div>
                 <div class="modal-footer">
                     <input type="button" value="儲存" class="btn" data-dismiss="modal" @click="save()">
@@ -90,7 +90,7 @@
                 </div>
                 <div class="modal-body">
                     <label>工作名稱</label>
-                    <input type="text" class="width80" v-model="filterdata.name">
+                    <input type="text" class="width15" v-model="filterdata.name">
                     <label>處理狀態</label>
                     <select class="width80" v-model="filterdata.status">
                         <option value="all">全部狀態</option>
@@ -116,7 +116,7 @@
                         </option>
                     </select>
                     <label>工作內容</label>
-                    <textarea cols="30" rows="10" class="width80" v-model="filterdata.description"></textarea>
+                    <textarea cols="30" rows="10" class="width15" v-model="filterdata.description"></textarea>
                 </div>
                 <div class="modal-footer">
                     <input type="button" value="儲存" class="btn" data-dismiss="modal" @click="blaload()">
@@ -182,10 +182,16 @@
                                         break;
                                 }
                             }
-                            for (i = 0; i < _this.times.length; i++) {
+                            for (let i = 0; i < _this.times.length; i++) {
                                 let c = false
                                 for (j = b.startTime; j < b.endTime; j++) {
                                     if (_this.times[i][j]) c = true
+                                }
+                                if (_this.times.length-1 == i && c){
+                                    _this.times.push([])
+                                    for (j = 0; j < 24; j++) {
+                                        _this.times[_this.times.length - 1].push(false)
+                                    }
                                 }
                                 if (c) continue
                                 for (j = b.startTime; j < b.endTime; j++) {
@@ -202,11 +208,17 @@
                 sort() {
                     this.resettime();
                     let blabla = [];
-                    this.works.forEach((b, idx) => {
+                    this.works.forEach((b) => {
                         for (i = 0; i < this.times.length; i++) {
                             let c = false
                             for (j = b.startTime; j < b.endTime; j++) {
                                 if (this.times[i][j]) c = true
+                            }
+                            if (this.times.length - 1 == i && c){
+                                this.times.push([])
+                                for (j = 0; j < 24; j++) {
+                                    this.times[this.times.length - 1].push(false)
+                                }
                             }
                             if (c) continue
                             for (j = b.startTime; j < b.endTime; j++) {
@@ -243,23 +255,6 @@
                     alert("登出成功")
                     location.href = "index.php"
                 },
-                dragstart(idx) {
-                    this.movedata = idx
-                    this.oldTime = this.works[idx].startTime
-                },
-                allowdrag(event) {
-                    let idx = this.movedata
-                    let timelong = this.works[idx].endTime - this.works[idx].startTime
-                    let newTime = Math.floor((event.layerY - 196) / 50)
-                    this.works[idx].startTime = newTime < 0 ? 0 : newTime > 24 - timelong ? 24 - timelong : newTime
-                    this.works[idx].endTime = this.works[idx].startTime + timelong
-                    event.preventDefault()
-                },
-                drop() {
-                    let idx = this.movedata
-                    $.post('api.php?do=editwork', this.$data.works[idx], function () { })
-                    this.blaload()
-                },
                 addwork() {
                     this.edit = {
                         id: -1,
@@ -281,20 +276,23 @@
                 },
                 save() {
                     if (this.edit.id == -1) {
-                        $.post('api.php?do=addwork', this.edit, function () { })
+                        $.post('api.php?do=addwork', this.edit, function () {})
                     } else {
-                        $.post('api.php?do=editwork', this.edit, function () { })
+                        $.post('api.php?do=editwork', this.edit, function () {})
                     }
                     this.blaload()
                 },
                 delwork(id) {
-                    $.post('api.php?do=delwork', { id: id }, function () { })
+                    $.post('api.php?do=delwork', { id: id }, function () {})
                     this.blaload()
                 },
-                mouseup(e) {
+                mouseup() {
+                    if (this.movedata === false) {
+                        return
+                    }
                     let idx = this.movedata
+                    $.post('api.php?do=editwork', this.$data.works[idx], function () {})
                     this.movedata = false
-                    $.post('api.php?do=editwork', this.$data.works[idx], function () { })
                     this.blaload()
                 },
                 mousedown(idx) {

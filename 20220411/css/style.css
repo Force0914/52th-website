@@ -47,6 +47,7 @@
 .login > .btn{
     height: 40px;
     width: 100%;
+    margin: 5px 0;
 }
 
 .dragbox{
@@ -68,6 +69,7 @@
     align-items: center;
     width: 40px;
     height: 40px;
+    background: white;
 }
 
 p{
@@ -99,7 +101,9 @@ p{
 .block{
     position: absolute;
     border-radius: 8px;
-    border-left: solid 5px #c0262d;
+    border-style: solid;
+    border-width: 0px 0px 1px 5px;
+    border-color: #c0262d;
     background: rgba(192, 38, 45, 0.3);
     height: 100px;
     width: 170px;
@@ -131,6 +135,12 @@ p{
     width: 80%;
     min-width: 80%;
     max-width: 80%;
+}
+
+.width15{
+    width: calc(80% - 15px);
+    min-width: calc(80% - 15px);
+    max-width: calc(80% - 15px);
 }
 
 .captcha{

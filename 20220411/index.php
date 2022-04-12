@@ -14,12 +14,14 @@
         <img :src=`gd.php?${v}` style="zoom: 3;" @click="captcha()" draggable="false">
         <p>(點擊圖片更新驗證碼)</p>
         <input type="button" value="重新產生" class="btn" @click="captcha()">
-        <div class="dragbox" v-show="list1.length >= 1">
+        <input type="button" value="切換驗證碼輸入模式" class="btn" @click="this.captchamode = !this.captchamode">
+        <div class="dragbox" v-show="list1.length >= 1 && !captchamode">
             <div class="drag" v-for="(item,index) in list1" draggable="true" @dragstart="drag(index)"><img :src=`gd1.php?${item}` draggable="false"></div>
         </div>
-        <div class="dragbox" @drop="drop()" @dragenter.prevent @dragover.prevent>
+        <div class="dragbox" v-show="!captchamode" @drop="drop()" @dragenter.prevent @dragover.prevent>
             <div class="drag" v-for="(item,index) in list2"><img :src=`gd1.php?${item}` draggable="false"></div>
         </div>
+        <input type="text" v-show="captchamode" class="newinput" placeholder="驗證碼" v-model="captchacode" maxlength="4" @input="input()">
         <input type="button" value="登入" class="btn" @click="login">
     </div>
 </div>
@@ -34,7 +36,10 @@
                 account:"",
                 password:"",
                 err: 0,
-                bla: ""
+                bla: "",
+                captchamode: false,
+                captchacode:"",
+                oldlength: 0
             }
         },
         methods:{
@@ -58,6 +63,7 @@
             resetlist(){
                 this.list1 = this.v.split("").sort(()=>{return Math.random()-0.5})
                 this.list2 = []
+                this.captchacode = ""
                 if (this.list1.join("") == this.v) this.resetlist()
             },
             drag(idx){
@@ -67,6 +73,7 @@
                 let idx = this.movedata
                 this.list2.push(this.list1[idx])
                 this.list1.splice(idx,1)
+                this.captchacode = this.list2.join("")
             },
             login(){
                 const _this = this
@@ -80,6 +87,23 @@
                         alert(a)
                     }
                 })
+            },
+            input(){
+                let bla = []
+                this.captchacode.split("").forEach((e)=>{
+                    if (this.list1.indexOf(e) >= 0){
+                        this.list2.push(this.list1[this.list1.indexOf(e)])
+                        this.list1.splice(this.list1.indexOf(e),1);
+                    }
+                    bla.push(this.list2.indexOf(e))
+                })
+                for (i = 0; i < this.list2.length; i++) {
+                    if (bla.indexOf(i) == -1){
+                        this.list1.push(this.list2[i])
+                        this.list2.splice(i,1);
+                    }
+                }
+                this.oldlength = this.captchacode.length
             }
         },
         mounted(){
