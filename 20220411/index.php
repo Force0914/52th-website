@@ -103,7 +103,6 @@
                         this.list2.splice(i,1);
                     }
                 }
-                this.oldlength = this.captchacode.length
             }
         },
         mounted(){
