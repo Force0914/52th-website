@@ -1,0 +1,144 @@
+*{
+    user-select: none;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.logo{
+    height: 40px;
+}
+
+.login{
+    width: 400px;
+    border: solid 1px #c0262d;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.logout{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.newinput{
+    border: unset !important;
+    border-radius: unset !important;
+    box-shadow: unset !important;
+    font-size: 18px !important;
+    height: 40px !important;
+    border-bottom: solid 1px #ccc !important;
+    width: calc(100% - 15px) !important;
+}
+
+.fakepassword{
+    -webkit-text-security: disc;
+}
+
+.btn{
+    background: #c0262d;
+    color: white;
+}
+
+.btn:hover, .btn:active,.btn-group.open .btn.dropdown-toggle{
+    background: #6d1519;
+    color: white;
+}
+
+.login > .btn{
+    margin: 5px 0;
+    width: 100%;
+    height: 40px;
+}
+
+.captcha{
+    zoom: 3;
+}
+
+.dragbox{
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    border: solid 1px #ccc;
+    border-radius: 8px;
+}
+
+.drag{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    height: 40px;
+    width: 40px;
+    border: solid 1px #ccc;
+    border-radius: 8px;
+}
+
+p{
+    margin: 0;
+    display: unset;
+}
+
+.table-border{
+    border: solid 1px #c0262d;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px auto;
+    width: 90%;
+}
+
+.work > tr {
+    height: 100px;
+}
+
+.block{
+    position: absolute;
+    width: 170px;
+    border-left: solid 5px #c0262d;
+    border-radius: 8px;
+    background: rgba(192,38,45,0.3);
+}
+
+.block-padding{
+    padding: 5px;
+}
+
+.block-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.block-body{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.block-body > b {
+    margin-left: 5px;
+}
+
+.width80{
+    width: 80% !important;
+    min-width: 80% !important;
+    max-width: 80% !important;
+}
+
+.width15{
+    width: calc(80% - 15px) !important;
+    min-width: calc(80% - 15px) !important;
+    max-width: calc(80% - 15px) !important;
+}

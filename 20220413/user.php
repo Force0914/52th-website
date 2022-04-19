@@ -19,8 +19,7 @@
             </div>
             <input type="button" value="預覽" class="btn" style="position: absolute;top: 100.5px;right: calc(5% + 60px)">
             <input type="button" value="編輯" class="btn" style="position: absolute;top: 100.5px;right: 5%" @click="editwork(this.select)">
-            <div class="block" v-for="(item,index) in works" @click="this.select = index" @dblclick="editwork(index)" @mousedown="mousedown(index)"
-                :style="{'top':196+item.startTime*50+'px','left':200+item.location*180+'px','height':(item.endTime-item.startTime)*50+'px'}" :class="{'onselect':this.select == index}">
+            <div class="block" v-for="(item,index) in works" @click="this.select = index" @dblclick="editwork(index)" @mousedown="mousedown(index)" :style="{'top':196+item.startTime*50+'px','left':200+item.location*180+'px','height':(item.endTime-item.startTime)*50+'px'}" :class="{'onselect':this.select == index}">
                 <div class="block-padding">
                     <div class="block-head">
                         <p>{{bla(item.startTime)}}:00-{{bla(item.endTime)}}:00</p>
@@ -135,10 +134,8 @@
                     date: this.formatedate(),
                     time: [],
                     times: [],
-                    apiworks: [],
                     works: [],
                     movedata: false,
-                    oldTime: -1,
                     edit: {},
                     filterdata: {
                         name: "",
