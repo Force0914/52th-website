@@ -1,5 +1,5 @@
 <?php
-$conn = new PDO("mysql:host=localhost;dbname=52;charset=utf8","admin","1234");
+$conn = new PDO("mysql:host=localhost;dbname=52_10;charset=utf8","admin","1234");
 
 function query($query){
     global $conn;

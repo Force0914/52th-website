@@ -11,7 +11,7 @@
         <h1>{{date}} TODO 工作表</h1>
         <input type="button" value="登出" class="btn logout" @click="logout()">
         <div class="btn-group">
-            <input type="button" value="新增工作計畫" class="btn" @click="addwork">
+            <input type="button" value="新增工作項目" class="btn" @click="addwork">
             <input type="date" v-model="date" style="margin: 0" @input="blaload()">
             <input type="button" value="設定篩選條件" class="btn" @click="filtermodal">
         </div>
@@ -55,11 +55,11 @@
             <input type="text" class="width15" v-model="edit.name">
             <label>開始時間</label>
             <select class="width80" v-model="edit.startTime">
-                <option v-for="i in 25" :value="i-1" :disabled="(i-1) <= edit.endTime">{{(i-1).toString().padStart(2,"0")}}:00</option>
+                <option v-for="i in 25" :value="i-1" :disabled="(i-1) >= edit.endTime">{{(i-1).toString().padStart(2,"0")}}:00</option>
             </select>
             <label>結束時間</label>
             <select class="width80" v-model="edit.endTime">
-                <option v-for="i in 25" :value="i-1" :disabled="(i-1) >= edit.startTime">{{(i-1).toString().padStart(2,"0")}}:00</option>
+                <option v-for="i in 25" :value="i-1" :disabled="(i-1) <= edit.startTime">{{(i-1).toString().padStart(2,"0")}}:00</option>
             </select>
             <label>處理狀態</label>
             <select class="width80" v-model="edit.status">
@@ -84,18 +84,18 @@
     <div id="filtermodal" class="modal fade hide">
         <div class="modal-header">
             <button class="close" data-dismiss="modal">&times;</button>
-            <h3>工作編輯</h3>
+            <h3>篩選條件</h3>
         </div>
         <div class="modal-body">
             <label>工作名稱</label>
             <input type="text" class="width15" v-model="filterdata.name">
             <label>開始時間</label>
             <select class="width80" v-model="filterdata.startTime">
-                <option v-for="i in 25" :value="i-1" :disabled="(i-1) <= filterdata.endTime">{{(i-1).toString().padStart(2,"0")}}:00</option>
+                <option v-for="i in 25" :value="i-1" :disabled="(i-1) >= filterdata.endTime">{{(i-1).toString().padStart(2,"0")}}:00</option>
             </select>
             <label>結束時間</label>
             <select class="width80" v-model="filterdata.endTime">
-                <option v-for="i in 25" :value="i-1" :disabled="(i-1) >= filterdata.startTime">{{(i-1).toString().padStart(2,"0")}}:00</option>
+                <option v-for="i in 25" :value="i-1" :disabled="(i-1) <= filterdata.startTime">{{(i-1).toString().padStart(2,"0")}}:00</option>
             </select>
             <label>處理狀態</label>
             <select class="width80" v-model="filterdata.status">
