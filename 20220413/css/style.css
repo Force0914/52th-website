@@ -1,0 +1,154 @@
+*{
+    user-select: none;
+}
+
+.center{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login{
+    border: solid 1px #c0262d;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+}
+
+.logo{
+    height: 40px;
+}
+
+.newinput{
+    border: unset !important;
+    border-radius: unset !important;
+    box-shadow: unset !important;
+    border-bottom: solid 1px #ccc !important;
+    font-size: 18px !important;
+    height: 40px !important;
+    width: calc(100% - 15px) !important;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.btn{
+    background: #c0262d;
+    color: white;
+}
+
+.btn:active, .btn:hover,.btn-group.open .btn.dropdown-toggle{
+    background: #5f1317;
+    color: white;
+}
+
+.login > .btn{
+    height: 40px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.dragbox{
+    margin: 10px 0;
+    border: solid 1px #ccc;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+}
+
+.drag{
+    display: flex;
+    border: solid 1px #ccc;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: white;
+}
+
+p{
+    display: unset;
+}
+
+.fakepassword{
+    -webkit-text-security: disc;
+}
+
+.table-border{
+    margin: 10px auto ;
+    width: 90%;
+    border-radius: 8px;
+    border: solid 1px #c0262d;
+    padding: 20px;
+}
+
+.logout{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.work>tr{
+    height: 100px;
+}
+
+.block{
+    position: absolute;
+    border-radius: 8px;
+    border-style: solid;
+    border-width: 0px 0px 1px 5px;
+    border-color: #c0262d;
+    background: rgba(192, 38, 45, 0.3);
+    height: 100px;
+    width: 170px;
+}
+
+.block-padding{
+    padding: 5px;
+}
+
+.block-head{
+    display: flex;
+    justify-content: space-between;
+}
+
+.block-head > p{
+    margin: 0;
+}
+
+.block-body{
+    display: flex;
+    justify-content: left;
+}
+
+.block-body > b{
+    margin-left: 5px;
+}
+
+.width80{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.width15{
+    width: calc(80% - 15px);
+    min-width: calc(80% - 15px);
+    max-width: calc(80% - 15px);
+}
+
+.captcha{
+    height: 40px !important;
+    width: calc(100% - 13px) !important;
+}
+
+.onselect{
+    border: solid 1px dodgerblue;
+    border-left: solid 5px dodgerblue;
+}
