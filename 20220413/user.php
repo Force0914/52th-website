@@ -271,6 +271,7 @@
                     $("#editmodal").modal('show')
                 },
                 editwork(idx) {
+                    this.select = -1
                     if (idx == -1) return alert("請先選取一個工作計畫")
                     this.edit = this.works[idx]
                     this.edit.userid = this.userid

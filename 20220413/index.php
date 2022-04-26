@@ -82,6 +82,7 @@
                         alert("登入成功")
                         location.href = `${a}.php`
                     }else{
+                        _this.captcha()
                         _this.err++
                         if (_this.err >= 3) location.href = "logerror.php"
                         alert(a)
