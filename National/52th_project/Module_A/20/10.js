@@ -15932,3 +15932,47 @@ var Vue = (function (exports) {
   return exports;
 
 }({}));
+
+const { ref, computed } = Vue
+let vue = Vue.createApp({
+  setup () {
+    let timer = 0
+    const starting = ref(false)
+    const count = ref(0)
+    const start = () => {
+      starting.value = true
+      timer = setInterval(() => {
+        if (count.value < 99999) count.value++
+      }, 10)
+    }
+    const stop = () => {
+      starting.value = false
+      clearInterval(timer)
+    }
+    const reset = () => {
+      count.value = 0
+    }
+    const text = computed(() => {
+      return Math.floor(count.value / 100).toString().padStart('3', '0') + ':' + (count.value % 100).toString().padStart('2', '0')
+    })
+    
+    const dot = computed(() => {
+        return (Math.floor(count.value / 50) % 2) ? false : true
+    })
+
+    return {
+      starting,
+      dot,
+      count,
+      start,
+      stop,
+      reset,
+      text
+    }
+  }
+})
+  .component('Number', {
+    template: '#number',
+    props: ['data','dot']
+  })
+  .mount('#app')
