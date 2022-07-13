@@ -10,7 +10,4 @@ foreach (str_split($str) as $key => $value) {
 for ($i=0; $i < rand(3,5); $i++) { 
     imageline($img,rand(0,400),rand(0,100),rand(0,400),rand(0,100),imagecolorallocate($img,rand(0,255),rand(0,255),rand(0,255)));
 }
-for ($i=0; $i < rand(3,5); $i++) { 
-    imagearc($img,rand(0,400),rand(0,100),rand(0,400),rand(0,100),rand(0,360),rand(0,360),imagecolorallocate($img,rand(0,255),rand(0,255),rand(0,255)));
-}
 imagejpeg($img);
