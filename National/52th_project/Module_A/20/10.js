@@ -15953,7 +15953,8 @@ let vue = Vue.createApp({
       count.value = 0
     }
     const text = computed(() => {
-      return Math.floor(count.value / 100).toString().padStart('3', '0') + ':' + (count.value % 100).toString().padStart('2', '0')
+        return Math.floor(count.value / 100).toString().padStart('3', '0') + ':' + (count.value % 100).toString().padStart('2', '0')
+        // return Math.floor(count.value / 100  / 60).toString().padStart('2', '0') + ':' + Math.floor(count.value / 100  % 60).toString().padStart('2', '0') + ':' + (count.value % 100).toString().padStart('2', '0')
     })
     
     const dot = computed(() => {
