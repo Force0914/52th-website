@@ -165,6 +165,11 @@ const unDoDelStudent = (idx) => {
   save()
 }
 
+const removeStudent = (idx) => {
+  studentList.splice(idx,1)
+  save()
+}
+
 const openAvatarUpload = () => {
   document.getElementById("avatar_upload").click()
 }
@@ -172,7 +177,16 @@ const openAvatarUpload = () => {
 const avatarUpload = (e) =>{
   const reader = new FileReader()
   reader.onload = () => {
-    dialogData.student.avatar = reader.result
+    let img = document.createElement("img")
+    img.onload = () => {
+      let canvas = document.createElement("canvas")
+      canvas.width = 120
+      canvas.height = 120
+      let ctx = canvas.getContext("2d")
+      ctx.drawImage(img,0,0,120,120)
+      dialogData.student.avatar = canvas.toDataURL(e.target.files[0].type)
+    }
+    img.src = reader.result
   }
   reader.readAsDataURL(e.target.files[0])
 }
@@ -246,8 +260,9 @@ onMounted(()=>{
             <td>
               <p class="actions">
                 <button class="hide edit" v-if="!data.del" @click="editStudent(data.id)">編輯</button>
-                <button class="hide delete" v-if="!data.del" @click="delStudent(data.id)">刪除</button>
                 <button class="hide delete" v-else @click="unDoDelStudent(data.id)">還原</button>
+                <button class="hide delete" v-if="!data.del" @click="delStudent(data.id)">刪除</button>
+                <button class="hide delete" v-else @click="removeStudent(data.id)">清除</button>
               </p>
             </td>
           </tr>
@@ -256,7 +271,7 @@ onMounted(()=>{
       <p class="message" v-if="filterStudent().length === 0">{{filter.text ===  '' ? "目前還沒有任何學生" : "在你的學生中找不到相符的搜尋結果"}}</p>
     </main>
   </div>
-  <Transition>
+  <Transition name="fade">
     <div class="dialog" id="dialog" v-if="dialog.addClass || dialog.addStudent">
       <div v-if="dialog.addClass">
         <h2 class="title">建立班級</h2>
@@ -270,7 +285,7 @@ onMounted(()=>{
           </div>
         </form>
       </div>
-      <div v-if="dialog.addStudent">
+      <div v-else-if="dialog.addStudent">
         <form class="newContact" @submit.prevent>
           <h2 class="title">建立學生</h2>
           <hr>
@@ -279,7 +294,7 @@ onMounted(()=>{
               <input type="text" class="newinput" placeholder="姓氏" name="last_name" autocomplete="off" v-model="dialogData.student.name.last">
               <input type="text" class="newinput" placeholder="名字" name="first_name" autocomplete="off" v-model="dialogData.student.name.first" required>
               <img :src="dialogData.student.avatar" class="avatar_preview" @click="openAvatarUpload()">
-              <input type="file" id="avatar_upload" class="avatar" accept=".bmp,.png,.jpg,. jpeg,.gif" style="display: none;" @input="avatarUpload">
+              <input type="file" id="avatar_upload" class="avatar" accept=".bmp,.png,.jpg,.jpeg,.gif" style="display: none;" @input="avatarUpload">
             </div>
             <div class="halfhalf">
               <input type="text" name="student_id" class="newinput" placeholder="學號" autocomplete="off" v-model="dialogData.student.student_id">

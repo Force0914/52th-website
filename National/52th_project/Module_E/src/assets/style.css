@@ -106,18 +106,15 @@ main{
 
 .contacts{
     width: 100%;
+    border-collapse: collapse;
 }
 
 tr.contact{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 56px;
-    padding: 0 24px;
+    height: 56px;
     border-radius: 8px;
-    margin-bottom: 8px;
+    border-bottom: solid 1px #888;
     background-color: #fff;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    /*box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);*/
 }
 
 .avatar{
@@ -132,8 +129,6 @@ tr.contact{
     align-items: center;
     justify-content: center;
 }
-
-
 
 .dialog {
     position: fixed;
@@ -311,4 +306,19 @@ button.edit{
 
 button.delete{
     color: darkred;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .35s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+    opacity: 1;
 }
