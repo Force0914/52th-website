@@ -15,10 +15,17 @@ class UserController extends Controller
             $result[key($result)]["profile_image"] = "http://".$_SERVER["HTTP_HOST"] . $result[key($result)]['profile_image'];
             $result[key($result)]["access_token"] = hash("sha256",$result[key($result)]["email"]);
             unset($result[key($result)]["password"]);
-            return response()->json(["success" => true, "message" => "", "data" => $result[key($result)]]);
+            return response()->json(RESTfulAPI(true,"",$result[key($result)]));
         }else{
-            return response()->json(["success" => false, "message" => "MSG_INVALID_LOGIN", "data" => ""])->setStatusCode(403);
+            return response()->json(RESTfulAPI(false,"MSG_INVALID_LOGIN",""))->setStatusCode(403);
         }
     }
 }
 
+function RESTfulAPI($success,$message,$data){
+    return [
+        "success" => $success, 
+        "message" => $message,
+        "data" => $data
+    ];
+}
