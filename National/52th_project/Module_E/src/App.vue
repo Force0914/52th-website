@@ -25,7 +25,7 @@ const getAllStudent = (del) => {
 }
 
 const getClassStudent = (key) =>{
-  return studentList.filter(data => data.class.indexOf(key) != -1 && !data.del)
+  return studentList.filter(data => data.class.includes(key) && !data.del)
 }
 
 const getDelStudent = () =>{
@@ -39,13 +39,13 @@ const load = async () => {
   let classListObjectStore = classListTransaction.objectStore("classList");
   let studentListObjectStore = studentListTransaction.objectStore("studentList");
   let classListRequest = classListObjectStore.get("data");
-  classListRequest.onsuccess = (event) => {
+  classListRequest.onsuccess = () => {
     if (classListRequest.result != undefined){
       classList.splice(0,classList.length,...JSON.parse(classListRequest.result))
     }
   };
   let studentListRequest = studentListObjectStore.get("data");
-  studentListRequest.onsuccess = (event) => {
+  studentListRequest.onsuccess = () => {
     if (studentListRequest.result != undefined){
       studentList.splice(0,studentList.length,...JSON.parse(studentListRequest.result))
     }
@@ -55,12 +55,12 @@ const load = async () => {
 const getDB = async () => {
   return new Promise((resolve) => {
     let request = window.indexedDB.open("52", 1);
-    request.onupgradeneeded = function (event) {
+    request.onupgradeneeded = function () {
       let db = request.result;
-      let classListObjectStore = db.createObjectStore("classList");
-      let studentListObjectStore = db.createObjectStore("studentList")
+      db.createObjectStore("classList");
+      db.createObjectStore("studentList")
     };
-    request.onsuccess = function (event) {
+    request.onsuccess = function () {
       resolve(request.result);
     };
   });
@@ -191,6 +191,11 @@ const avatarUpload = (e) =>{
   reader.readAsDataURL(e.target.files[0])
 }
 
+const submit = (e) => {
+  saveStudent(dialog.edit)
+  e.preventDefault()
+}
+
 onMounted(()=>{
   load()
 })
@@ -276,7 +281,7 @@ onMounted(()=>{
       <div v-if="dialog.addClass">
         <h2 class="title">建立班級</h2>
         <form class="newClass" @submit.prevent>
-          <input type="text" name="name" class="newinput" v-model="dialogData.class.name" placeholder="班級名稱" autocomplete="off">
+          <input type="text" name="name" class="newInput" v-model="dialogData.class.name" placeholder="班級名稱" autocomplete="off">
           <div class="flex">
             <button type="button" class="close" style="margin: 12px;"
                     @click="dialog.addClass = false">取消</button>
@@ -286,31 +291,31 @@ onMounted(()=>{
         </form>
       </div>
       <div v-else-if="dialog.addStudent">
-        <form class="newContact" @submit.prevent>
+        <form class="newContact" @submit="submit">
           <h2 class="title">建立學生</h2>
           <hr>
           <div class="form">
             <div class="name">
-              <input type="text" class="newinput" placeholder="姓氏" name="last_name" autocomplete="off" v-model="dialogData.student.name.last">
-              <input type="text" class="newinput" placeholder="名字" name="first_name" autocomplete="off" v-model="dialogData.student.name.first" required>
+              <input type="text" class="newInput" placeholder="姓氏" name="last_name" autocomplete="off" v-model="dialogData.student.name.last">
+              <input type="text" class="newInput" placeholder="名字" name="first_name" autocomplete="off" v-model="dialogData.student.name.first" required>
               <img :src="dialogData.student.avatar" class="avatar_preview" @click="openAvatarUpload()">
               <input type="file" id="avatar_upload" class="avatar" accept=".bmp,.png,.jpg,.jpeg,.gif" style="display: none;" @input="avatarUpload">
             </div>
-            <div class="halfhalf">
-              <input type="text" name="student_id" class="newinput" placeholder="學號" autocomplete="off" v-model="dialogData.student.student_id">
-              <input type="email" name="email[]" class="newinput" placeholder="電子郵件" autocomplete="off" v-model="dialogData.student.email">
+            <div class="half-half">
+              <input type="text" name="student_id" class="newInput" placeholder="學號" autocomplete="off" v-model="dialogData.student.student_id">
+              <input type="email" name="email[]" class="newInput" placeholder="電子郵件" autocomplete="off" v-model="dialogData.student.email">
             </div>
-            <input type="tel" name="phone[]" class="newinput" placeholder="電話" autocomplete="off" v-model="dialogData.student.phone">
-            <select class="class newselect" name="class" multiple v-model="dialogData.student.class">
+            <input type="tel" name="phone[]" class="newInput" placeholder="電話" pattern="\d*" oninvalid="this.setCustomValidity('電話號碼必須為數字')" oninput="this.setCustomValidity('')" autocomplete="off" v-model="dialogData.student.phone">
+            <select class="class newSelect" name="class" multiple v-model="dialogData.student.class">
               <option value="" selected disabled>請選擇班級</option>
               <option v-for="(data, key) in classList" :value="key">{{data.name}}</option>
             </select>
-            <textarea name="note" class="newtextarea" placeholder="備註" autocomplete="off" v-model="dialogData.student.note"></textarea>
+            <textarea name="note" class="newTextarea" placeholder="備註" autocomplete="off" v-model="dialogData.student.note"></textarea>
           </div>
           <hr>
           <div class="flex">
             <button type="button" class="close" style="margin: 12px;" @click="dialog.addStudent = false;load()">取消</button>
-            <button type="submit" class="submit" style="margin: 12px;" @click="saveStudent(dialog.edit)">儲存</button>
+            <button type="submit" class="submit" style="margin: 12px;">儲存</button>
           </div>
         </form>
       </div>

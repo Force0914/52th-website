@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+<div class="face">
+    <div class="eye">
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+    <div class="mouth normal"></div>
+</div>
+<div class="btn-group">
+    <button class="btn" onclick="changeFace('happy')">:)</button>
+    <button class="btn" onclick="changeFace('normal')">:|</button>
+    <button class="btn" onclick="changeFace('sad')">:(</button>
+</div>
+<script>
+    function changeFace(face){
+        let color = {
+            first: "",
+            last:""
+        }
+        switch (face){
+            case "happy":
+                color.first = "#83B458"
+                color.last = "#A9DB7A"
+                break;
+            case "normal":
+                color.first = "#DAA656"
+                color.last = "#EED16B"
+                break;
+            case "sad":
+                color.first = "#DE5D63"
+                color.last = "#EE9295"
+                break;
+        }
+        document.getElementsByClassName("mouth")[0].classList.remove(document.getElementsByClassName("mouth")[0].classList[1])
+        document.getElementsByClassName("mouth")[0].classList.add(face)
+        document.getElementsByClassName("dot")[0].style.background = color.first
+        document.getElementsByClassName("dot")[1].style.background = color.first
+        document.getElementsByClassName("face")[0].style.borderColor = color.first
+        document.getElementsByClassName("face")[0].style.background = color.last
+    }
+</script>
+</body>
+</html>

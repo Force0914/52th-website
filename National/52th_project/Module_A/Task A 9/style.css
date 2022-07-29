@@ -1,0 +1,75 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
+
+.face{
+    background: #EED16B;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: solid 20px #DAA656;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: all 0.5s ease;
+}
+
+
+.eye{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 150px;
+    margin-bottom: 50px;
+    transition: all 0.5s ease;
+}
+
+.dot{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #DAA656;
+    transition: all 0.5s ease;
+}
+
+.mouth{
+    transition: all 0.5s ease;
+}
+
+.happy{
+    width: 200px;
+    height: 40px;
+    background: #83B458;
+    border-radius: 50% / 0 0 100% 100%;
+}
+
+.normal{
+    width: 200px;
+    height: 40px;
+    background: #DAA656;
+    border-radius: 50vh;
+}
+
+.sad{
+    width: 200px;
+    height: 40px;
+    background: #DE5D63;
+    border-radius: 50% / 100% 100% 0 0;
+}
+
+.btn-group{
+    margin: 10px 0;
+}
+
+.btn{
+    width: 100px;
+    height: 50px;
+    margin: 0 10px;
+    border-radius: 50vw;
+}

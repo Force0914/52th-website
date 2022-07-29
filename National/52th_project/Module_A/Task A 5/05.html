@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='jquery-ui.min.css' integrity='sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==' crossorigin='anonymous'/>
+  <title>Document</title>
+  <style>
+    #container {
+      width: 500px;
+      height: 500px;
+      position: relative;
+    }
+    #crop {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border: 3px dashed #ccc;
+      mix-blend-mode: difference;
+      top: 0;
+      left: 0;
+    }
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <input type="file" id="file">
+  <input type="button" value="送出" id="submit">
+  <input type="button" value="Crop" id="cropbtn">
+  <hr>
+  <div id="container">
+    <img id="img">
+    <div id="crop"></div>
+  </div>
+  <script src='jquery.min.js'></script>
+  <script src='jquery-ui.min.js'></script>
+  <script>
+    let image = {
+      file: null,
+      name: ''
+    }
+    let iscrop = false
+    $('#crop').resizable().draggable()
+    $('#file').change(function (e) {
+      image.name = e.target.files[0].name
+      const reader = new FileReader()
+      reader.onload = () => {
+        image.file = reader.result
+      }
+      reader.readAsDataURL(e.target.files[0])
+    })
+    $('#submit').click(function () {
+      $('#img').attr('src', image.file)
+      $('#container').width($('#img').width()).width($('#img').height())
+      iscrop = false
+      $("#cropbtn")[0].value = 'Crop'
+    })
+    $('#cropbtn').click(function () {
+      if ($("#cropbtn")[0].value == "Crop"){
+        const canvas = document.createElement('canvas')
+        const crop = $('#crop')
+        const w = crop.width()
+        const h = crop.height()
+        canvas.width = w
+        canvas.height = h
+        const ctx = canvas.getContext('2d')
+        const pos = crop.position()
+        ctx.drawImage($('#img')[0], pos.left, pos.top, w, h, 0, 0, w, h)
+        const a = document.createElement('a')
+        a.href = canvas.toDataURL()
+        a.download = `crop_${image.name}`
+        iscrop = a
+        $("#cropbtn")[0].value = 'download'
+      }else {
+        iscrop.click()
+      }
+    })
+  </script>
+</body>
+</html>
