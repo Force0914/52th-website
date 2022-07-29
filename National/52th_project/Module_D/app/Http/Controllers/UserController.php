@@ -24,7 +24,7 @@ class UserController extends Controller
 
 function RESTfulAPI($success,$message,$data){
     return [
-        "success" => $success, 
+        "success" => $success,
         "message" => $message,
         "data" => $data
     ];
