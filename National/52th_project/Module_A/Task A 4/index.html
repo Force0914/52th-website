@@ -115,14 +115,14 @@
 				}
 
 				const dl = () => {
-					const dlc = document.createElement("canvas")
+					const ccv = document.createElement("canvas")
 					const cimg = document.getElementsByClassName("img-container")[0]
-					let cv = canvas.value
-					dlc.width = cv.width > cimg.clientWidth ? cimg.clientWidth : cv.width
-					dlc.height = cv.height > cimg.clientHeight ? cimg.clientHeight : cv.height
-					dlc.getContext("2d").drawImage(cv,(cv.width-dlc.width)/2,(cv.height-dlc.height)/2,dlc.width,dlc.height)
+					const cv = canvas.value
+					ccv.width = cv.width > cimg.clientWidth ? cimg.clientWidth : cv.width
+					ccv.height = cv.height > cimg.clientHeight ? cimg.clientHeight : cv.height
+					ccv.getContext("2d").drawImage(cv,cv.width/2-ccv.width/2,cv.height/2-ccv.height/2,ccv.width,ccv.height,0,0,ccv.width,ccv.height)
 					const a = document.createElement('a')
-					a.href = dlc.toDataURL()
+					a.href = ccv.toDataURL()
 					a.download = file.value.name
 					a.click()
 				}
