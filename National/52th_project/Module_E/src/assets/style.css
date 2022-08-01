@@ -46,7 +46,6 @@ header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /*padding: 0 30px;*/
     margin: 10px 0;
 }
 
@@ -108,6 +107,11 @@ main{
 .contacts{
     width: 100%;
     border-collapse: collapse;
+}
+
+thead>tr.contact{
+    position: sticky;
+    top: 0;
 }
 
 tr.contact{

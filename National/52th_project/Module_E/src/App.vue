@@ -2,6 +2,10 @@
 import {ref,reactive,onMounted} from "vue";
 
 let searchText = ref("")
+let wheelData = reactive({
+  index: 0,
+  length: 20
+})
 let filter = reactive({
   class:null,
   text:""
@@ -196,6 +200,16 @@ const submit = (e) => {
   e.preventDefault()
 }
 
+const wheel = (e) => {
+  wheelData.index += e.deltaY/56
+  wheelData.index = wheelData.index <= 0 ? 0 : wheelData.index >= filterStudent().length-wheelData.length ? filterStudent().length-wheelData.length : wheelData.index
+}
+
+const recyclerView = (data,length) =>{
+  wheelData.length = length
+  return data.filter((v,i)=>i>=wheelData.index&&i<wheelData.index+length)
+}
+
 onMounted(()=>{
   load()
 })
@@ -228,20 +242,20 @@ onMounted(()=>{
       </ul>
     </aside>
     <main id="main">
-      <table class="contacts">
+      <table class="contacts" @wheel="wheel">
         <thead>
-          <tr class="contact">
-            <th>大頭貼</th>
-            <th>姓名</th>
-            <th>學號</th>
-            <th>電子郵件</th>
-            <th>電話號碼</th>
-            <th>班級</th>
-            <th>功能按鈕</th>
-          </tr>
+        <tr class="contact">
+          <th>大頭貼</th>
+          <th>姓名</th>
+          <th>學號</th>
+          <th>電子郵件</th>
+          <th>電話號碼</th>
+          <th>班級</th>
+          <th>功能按鈕</th>
+        </tr>
         </thead>
         <tbody>
-          <tr class="contact" v-for="(data) in filterStudent()">
+          <tr class="contact" v-for="(data) in recyclerView(filterStudent(),20)">
             <td>
               <div>
                 <img :src="data.avatar" class="avatar">
