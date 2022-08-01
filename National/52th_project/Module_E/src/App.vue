@@ -203,7 +203,7 @@ const submit = (e) => {
 const scroll = () => {
   const main = document.getElementById("main")
   let num = Math.floor(main.scrollTop / ((main.scrollHeight-main.clientHeight)/filterStudent().length))
-  scrollData.num = num >= scrollData.length ? scrollData.length : num
+  scrollData.num = (num + scrollData.length) >= filterStudent().length ? filterStudent().length - scrollData.length : num
 }
 
 const recyclerView = (data,length) =>{
