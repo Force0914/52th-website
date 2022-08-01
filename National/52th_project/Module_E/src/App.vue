@@ -2,9 +2,9 @@
 import {ref,reactive,onMounted} from "vue";
 
 let searchText = ref("")
-let wheelData = reactive({
-  index: 0,
-  length: 20
+let scrollData = reactive({
+  num:0,
+  length:20
 })
 let filter = reactive({
   class:null,
@@ -200,14 +200,15 @@ const submit = (e) => {
   e.preventDefault()
 }
 
-const wheel = (e) => {
-  wheelData.index += e.deltaY/56
-  wheelData.index = wheelData.index <= 0 ? 0 : wheelData.index >= filterStudent().length-wheelData.length ? filterStudent().length-wheelData.length : wheelData.index
+const scroll = () => {
+  const main = document.getElementById("main")
+  let num = Math.floor(main.scrollTop / ((main.scrollHeight-main.clientHeight)/filterStudent().length))
+  scrollData.num = num >= scrollData.length ? scrollData.length : num
 }
 
 const recyclerView = (data,length) =>{
-  wheelData.length = length
-  return data.filter((v,i)=>i>=wheelData.index&&i<wheelData.index+length)
+  scrollData.length = length
+  return data.filter((v,i)=>i>=scrollData.num&&i<scrollData.num+length)
 }
 
 onMounted(()=>{
@@ -241,8 +242,8 @@ onMounted(()=>{
         <li :class="{item:true,current:filter.class == 'garbage'}" @click="filter.class = 'garbage'">垃圾桶<span class="num">{{ getDelStudent().length }}</span></li>
       </ul>
     </aside>
-    <main id="main">
-      <table class="contacts" @wheel="wheel">
+    <main id="main" @scroll="scroll">
+      <table class="contacts">
         <thead>
         <tr class="contact">
           <th>大頭貼</th>
