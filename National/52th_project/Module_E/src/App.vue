@@ -1,5 +1,5 @@
 <script setup>
-import {ref,reactive,onMounted} from "vue";
+import {ref,reactive,watch,onMounted} from "vue";
 
 let searchText = ref("")
 let scrollData = reactive({
@@ -200,8 +200,8 @@ const submit = (e) => {
   e.preventDefault()
 }
 
-const scroll = () => {
-  const main = document.getElementById("main")
+const scroll = (ele) => {
+  const main = document.getElementById(ele)
   let num = Math.floor(main.scrollTop / ((main.scrollHeight-main.clientHeight)/filterStudent().length))
   scrollData.num = (num + scrollData.length) >= filterStudent().length ? filterStudent().length - scrollData.length : num
 }
@@ -210,6 +210,10 @@ const recyclerView = (data,length) =>{
   scrollData.length = length
   return data.filter((v,i)=>i>=scrollData.num&&i<scrollData.num+length)
 }
+
+watch(filter,()=>{
+  scrollData.num = 0
+})
 
 onMounted(()=>{
   load()
@@ -242,7 +246,7 @@ onMounted(()=>{
         <li :class="{item:true,current:filter.class == 'garbage'}" @click="filter.class = 'garbage'">垃圾桶<span class="num">{{ getDelStudent().length }}</span></li>
       </ul>
     </aside>
-    <main id="main" @scroll="scroll">
+    <main id="main" @scroll="scroll('main')">
       <table class="contacts">
         <thead>
         <tr class="contact">
