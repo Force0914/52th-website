@@ -4,7 +4,7 @@ $num = readline();
 $data = [];
 
 foreach(range(1,$num) as $i){
-    $in = array_shift($lines);
+    $in = readline();
     $c = 0;
     if(preg_match('/[0-9]/',$in)) $c++;
     if(preg_match('/[A-Z]/',$in)) $c++;
